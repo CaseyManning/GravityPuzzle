@@ -17,8 +17,8 @@ class GameScene: SKScene {
     var playerX = 1
     var playerY = 2
     var level = 0
-    var offsetX = -150
-    var offsetY = -92
+    var offsetX = -0
+    var offsetY = 0
     var initialTouchLocation = CGPoint(x: 0, y: 0)
     var switchLeft: MSButtonNode!
     var switchRight: MSButtonNode!
@@ -29,6 +29,10 @@ class GameScene: SKScene {
     
     
     override func didMoveToView(view: SKView) {
+        offsetX = -blockSize*2 + 26
+        offsetY = -blockSize*2 + 26
+        
+
         switchLeft = childNodeWithName("left") as! MSButtonNode
         switchRight = childNodeWithName("right") as! MSButtonNode
         levelNode = childNodeWithName("levelNode")!
@@ -229,12 +233,12 @@ class GameScene: SKScene {
 
         for(_, list) in levels[level].enumerate() {
             for(_, block) in list.enumerate() {
-                block.sprite.removeFromParent()
+               // block.sprite.removeFromParent()
             }
         }
 
         
-        if !left {
+        /*if !left {
             
             let M = levels[level].count
             let N = levels[level][0].count
@@ -292,34 +296,117 @@ class GameScene: SKScene {
             let y = playerY
             playerX = y
             playerY = 3 - x
-        }
+        }*/
         //player.removeFromParent()
         //levelNode.addChild(player)
-        /* if left {
-            levelNode.runAction(SKAction.rotateByAngle(CGFloat(-π/2), duration: 1))
-        } else {
-             let action = SKAction.rotateByAngle(CGFloat(π/2), duration: 1)
-             let sequence = SKAction.sequence([action,SKAction.runBlock({ () -> Void in
-             print("hi")
+         if left {
+            let action = SKAction.rotateByAngle(CGFloat(π/2), duration: 1)
+            let reset = SKAction.rotateByAngle(CGFloat(-self.π/2), duration: 0)
+            let sequence = SKAction.sequence([action, reset, SKAction.runBlock({ () -> Void in
+                for _ in 1...3 {
+                    
+                    let M = self.levels[self.level].count
+                    let N = self.levels[self.level][0].count
+                    
+                    
+                    for(_, list) in self.levels[self.level].enumerate() {
+                        for(_, block) in list.enumerate() {
+                            block.sprite.removeFromParent()
+                        }
+                    }
+
+                    //print(M)
+                    //print(N)
+                    var ret = [[Int]]()
+                    ret.append([Int](count: N, repeatedValue: 0))
+                    ret.append([Int](count: N, repeatedValue: 0))
+                    ret.append([Int](count: N, repeatedValue: 0))
+                    ret.append([Int](count: N, repeatedValue: 0))
+                    for r in 0...M-1 {
+                        for c in 0...N-1 {
+                            //print(M-1-r)
+                            ret[c][M-1-r] = self.levels[self.level][r][c].id;
+                        }
+                    }
+                    
+                    for(i, list) in ret.enumerate() {
+                        for(j, block) in list.enumerate() {
+                            self.levels[self.level][i][j] = Block(id:block)
+                        }
+                    }
+                }
+                let x = self.playerX
+                let y = self.playerY
+                self.playerX = y
+                self.playerY = 3 - x
+                //self.levelNode.runAction(SKAction.rotateByAngle(CGFloat(-self.π/2), duration: 0))
+                self.drawLevel()
+                self.drawPlayer()
+
             })])
-        */
+             levelNode.runAction(sequence)
+        } else {
+            let reset = SKAction.rotateByAngle(CGFloat(self.π/2), duration: 0)
+             let action = SKAction.rotateByAngle(CGFloat(-π/2), duration: 1)
+             let sequence = SKAction.sequence([action, reset, SKAction.runBlock({ () -> Void in
+                let M = self.levels[self.level].count
+                let N = self.levels[self.level][0].count
+                
+                for(_, list) in self.levels[self.level].enumerate() {
+                    for(_, block) in list.enumerate() {
+                        block.sprite.removeFromParent()
+                    }
+                }
+                
+                // print(M)
+                //print(N)
+                var ret = [[Int]]()
+                ret.append([Int](count: N, repeatedValue: 0))
+                ret.append([Int](count: N, repeatedValue: 0))
+                ret.append([Int](count: N, repeatedValue: 0))
+                ret.append([Int](count: N, repeatedValue: 0))
+                for r in 0...M-1 {
+                    for c in 0...N-1 {
+                        //print(M-1-r)
+                        ret[c][M-1-r] = self.levels[self.level][r][c].id;
+                    }
+                }
+                
+                for(i, list) in ret.enumerate() {
+                    for(j, block) in list.enumerate() {
+                        self.levels[self.level][i][j] = Block(id:block)
+                    }
+                }
+                
+                let x = self.playerX
+                let y = self.playerY
+                self.playerX = 3 - y
+                self.playerY = x
+                self.drawLevel()
+                self.drawPlayer()
+                //self.levelNode.runAction(SKAction.rotateByAngle(CGFloat(self.π/2), duration: 0))
+            })])
+            levelNode.runAction(sequence)
         
+        }
         
+        // this is getting called before the runblock finishes (threading issue)
         
-        drawPlayer()
-        drawLevel()
-        drawPlayer()
+        //drawLevel()
+        //drawPlayer()
         
         print("rgiu X is \(playerX), Y is \(playerY)")
 
     }
     
     func drawPlayer() {
+        print("\n\nbefore it all falls apart \(player.position) x\(playerX)y\(playerY)")
         player.position.x = CGFloat(playerX*blockSize + offsetX)
         // logical height of game
         let logicalHeight = 3 * blockSize + offsetY
         // don't disalign reality
         player.position.y = CGFloat(logicalHeight - playerY*blockSize)
+        print("after it is all thoroughly broken \(player.position)")
     }
     
     
