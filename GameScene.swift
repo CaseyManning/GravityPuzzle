@@ -7,6 +7,7 @@
 //
 
 import SpriteKit
+import Foundation
 
 class GameScene: SKScene {
     
@@ -16,23 +17,27 @@ class GameScene: SKScene {
     var playerX = 1
     var playerY = 2
     var level = 0
-    var offsetX = 180
-    var offsetY = 50
+    var offsetX = -150
+    var offsetY = -92
     var initialTouchLocation = CGPoint(x: 0, y: 0)
     var switchLeft: MSButtonNode!
     var switchRight: MSButtonNode!
+    var levelNode: SKNode!
+    var π = 3.141592
+    var gameDone = false
+    var dead = false
+    
     
     override func didMoveToView(view: SKView) {
         switchLeft = childNodeWithName("left") as! MSButtonNode
         switchRight = childNodeWithName("right") as! MSButtonNode
+        levelNode = childNodeWithName("levelNode")!
         loadLevels()
         drawLevel()
-        player.position.x = CGFloat(playerX*blockSize + offsetX)
-        player.position.y = CGFloat(playerY*blockSize + offsetY)
-        player.position.y -= 72
+        drawPlayer()
         player.zPosition = 10
         
-        addChild(player)
+        levelNode.addChild(player)
         
         switchLeft.selectedHandler = {self.switchGravity(true)}
         switchRight.selectedHandler = {self.switchGravity(false)}
@@ -68,6 +73,18 @@ class GameScene: SKScene {
         }
     }
     
+    func restartLevel() {
+        if dead {return}
+        dead = true
+        sleep(1)
+        let skView = self.view as SKView!
+        let scene = BetweenScene(fileNamed:"BetweenScene")!
+        scene.scaleMode = .AspectFill
+        skView.presentScene(scene)
+        scene.level = self.level
+
+    }
+    
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         print("X is \(playerX), Y is \(playerY)")
@@ -82,16 +99,21 @@ class GameScene: SKScene {
         
         
         if won() {
-            sleep(1)
-            let skView = self.view as SKView!
-            let scene = BetweenScene(fileNamed:"BetweenScene")!
-            scene.scaleMode = .AspectFill
-           // skView.presentScene(scene)
-            scene.level = self.level
+            print("You Win")
+            print(random())
+            if random() < 10000000 {
+                let skView = self.view as SKView!
+                let scene = BetweenScene(fileNamed:"BetweenScene")!
+                scene.scaleMode = .AspectFill
+                skView.presentScene(scene)
+                scene.level = self.level
+            }
+            
         }
     }
     
     func gravity() -> Bool {
+         print("X is \(playerX), Y is \(playerY)")
         var f = false
         for(i, list) in levels[level].dropLast().enumerate() {
             for(j, block) in list.enumerate() {
@@ -104,13 +126,14 @@ class GameScene: SKScene {
                     levels[level][i+1][j].sprite.position.y += CGFloat(blockSize)
                     levels[level][i][j] = levels[level][i+1][j]
                     levels[level][i+1][j] = block
-                    addChild(block.sprite)
+                    levelNode.addChild(block.sprite)
                     f = true
                 }
             }
         }
         
         if playerY < 3 {
+            print("disduuisiuifuih")
             if levels[level][playerY + 1][playerX].id == 0 {
                 player.runAction(SKAction.moveBy(CGVector(dx: 0, dy: -blockSize), duration: 0.30))
                 playerY += 1
@@ -127,7 +150,7 @@ class GameScene: SKScene {
                 block.sprite.position = CGPoint(x: j*blockSize, y: i*blockSize)
                 block.sprite.position.x += CGFloat(offsetX)
                 block.sprite.position.y += CGFloat(offsetY)
-                addChild(block.sprite)
+                levelNode.addChild(block.sprite)
             }
         }
     }
@@ -202,7 +225,8 @@ class GameScene: SKScene {
     }
     
     func switchGravity(left: Bool) {
-        
+        print("Happy Time X is \(playerX), Y is \(playerY)")
+
         for(_, list) in levels[level].enumerate() {
             for(_, block) in list.enumerate() {
                 block.sprite.removeFromParent()
@@ -214,8 +238,8 @@ class GameScene: SKScene {
             
             let M = levels[level].count
             let N = levels[level][0].count
-            print(M)
-            print(N)
+           // print(M)
+            //print(N)
             var ret = [[Int]]()
             ret.append([Int](count: N, repeatedValue: 0))
             ret.append([Int](count: N, repeatedValue: 0))
@@ -223,7 +247,7 @@ class GameScene: SKScene {
             ret.append([Int](count: N, repeatedValue: 0))
             for r in 0...M-1 {
                 for c in 0...N-1 {
-                    print(M-1-r)
+                    //print(M-1-r)
                     ret[c][M-1-r] = levels[level][r][c].id;
                 }
             }
@@ -234,13 +258,18 @@ class GameScene: SKScene {
                 }
             }
             
+            let x = playerX
+            let y = playerY
+            playerX = 3 - y
+            playerY = x
+            
         } else {
             for _ in 1...3 {
                 
                 let M = levels[level].count
                 let N = levels[level][0].count
-                print(M)
-                print(N)
+                //print(M)
+                //print(N)
                 var ret = [[Int]]()
                 ret.append([Int](count: N, repeatedValue: 0))
                 ret.append([Int](count: N, repeatedValue: 0))
@@ -248,7 +277,7 @@ class GameScene: SKScene {
                 ret.append([Int](count: N, repeatedValue: 0))
                 for r in 0...M-1 {
                     for c in 0...N-1 {
-                        print(M-1-r)
+                        //print(M-1-r)
                         ret[c][M-1-r] = levels[level][r][c].id;
                     }
                 }
@@ -259,12 +288,41 @@ class GameScene: SKScene {
                     }
                 }
             }
-            
+            let x = playerX
+            let y = playerY
+            playerX = y
+            playerY = 3 - x
         }
+        //player.removeFromParent()
+        //levelNode.addChild(player)
+        /* if left {
+            levelNode.runAction(SKAction.rotateByAngle(CGFloat(-π/2), duration: 1))
+        } else {
+             let action = SKAction.rotateByAngle(CGFloat(π/2), duration: 1)
+             let sequence = SKAction.sequence([action,SKAction.runBlock({ () -> Void in
+             print("hi")
+            })])
+        */
         
+        
+        
+        drawPlayer()
         drawLevel()
+        drawPlayer()
+        
+        print("rgiu X is \(playerX), Y is \(playerY)")
 
     }
+    
+    func drawPlayer() {
+        player.position.x = CGFloat(playerX*blockSize + offsetX)
+        // logical height of game
+        let logicalHeight = 3 * blockSize + offsetY
+        // don't disalign reality
+        player.position.y = CGFloat(logicalHeight - playerY*blockSize)
+    }
+    
+    
 }
 
 
