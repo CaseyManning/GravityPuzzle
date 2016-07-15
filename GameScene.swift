@@ -60,6 +60,11 @@ class GameScene: SKScene {
     
     func loadLevels() {
         
+        let level0 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 2)]]
+        
         let level1 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
@@ -106,6 +111,17 @@ class GameScene: SKScene {
                       [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
                       [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 2)]]
 
+       let level10 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)]]
+        
+        let level11 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)]]
+
+        levels.append(level0)
         levels.append(level1)
         levels.append(level2)
         levels.append(level3)
@@ -115,6 +131,8 @@ class GameScene: SKScene {
         levels.append(level7)
         levels.append(level8)
         levels.append(level9)
+        levels.append(level10)
+        levels.append(level11)
         
     }
     
@@ -392,13 +410,19 @@ class GameScene: SKScene {
     }
     
     func playerDead() {
+        if !dead {
         if levels[level][playerY][playerX].id != 0 {
-            let skView = self.view as SKView!
-            let scene = GameScene(fileNamed:"GameScene")!
-            scene.scaleMode = .AspectFill
-            scene.level = level
-            skView.presentScene(scene)
-            
+            dead = true
+            let sequence = SKAction.sequence([SKAction.waitForDuration(0.3), SKAction.runBlock({ () -> Void in
+                print("You Lose")
+                let skView = self.view as SKView!
+                let scene = GameScene(fileNamed:"GameScene")!
+                scene.scaleMode = .AspectFill
+                skView.presentScene(scene)
+                scene.level = self.level
+            })])
+            runAction(sequence)
+        }
         }
     }
     

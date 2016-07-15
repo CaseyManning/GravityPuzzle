@@ -21,10 +21,19 @@ class LevelSelect: SKScene {
     }
     
     func loadLevels() {
-        for (_,level) in levels.enumerate() {
+        
+        for i in 0...numLevels {
+            levels[i] = childNodeWithName("button\(i)") as! MSButtonNode
+        }
+        
+        for (i,level) in levels.enumerate() {
             
             level.selectedHandler = {
-                
+                let skView = self.view as SKView!
+                let scene = GameScene(fileNamed:"GameScene")!
+                scene.scaleMode = .AspectFill
+                scene.level = i
+                skView.presentScene(scene)
             }
         }
     }
