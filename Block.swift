@@ -19,5 +19,9 @@ class Block {
     init(id: Int) {
         sprite = SKSpriteNode(imageNamed: "\(id).png")
         self.id = id
+        
+        if id == 4 {
+            affectedByGravity = false
+        }
     }
 }
