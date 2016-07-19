@@ -11,19 +11,23 @@ import SpriteKit
 
 class LevelSelect: SKScene {
     
+    
+    
     var levels: [MSButtonNode]!
     
     var numLevels = 10
     var l = 0
     
     override func didMoveToView(view: SKView) {
-        
+        var f: MSButtonNode = childNodeWithName("level1") as! MSButtonNode
+        levels = [MSButtonNode](count: numLevels, repeatedValue: f)
+        loadLevels()
     }
     
     func loadLevels() {
         
-        for i in 0...numLevels {
-            levels[i] = childNodeWithName("button\(i)") as! MSButtonNode
+        for i in 0...numLevels - 1 {
+            levels[i] = childNodeWithName("level\(i)") as! MSButtonNode
         }
         
         for (i,level) in levels.enumerate() {

@@ -11,11 +11,11 @@ import SpriteKit
 class MenuScene: SKScene {
     
     var playButton: MSButtonNode!
+    var levelSelect: MSButtonNode!
     
     override func didMoveToView(view: SKView) {
         
         playButton = childNodeWithName("playButton") as! MSButtonNode
-        
         playButton.selectedHandler = {
             /* Grab reference to our SpriteKit view */
             let skView = self.view as SKView!
@@ -30,7 +30,25 @@ class MenuScene: SKScene {
             /* Start game scene */
             skView.presentScene(scene)
         }
+
         
+        levelSelect = childNodeWithName("levelSelect") as! MSButtonNode
+        
+        levelSelect.selectedHandler = {
+            /* Grab reference to our SpriteKit view */
+            let skView = self.view as SKView!
+            
+            /* Load Game scene */
+            let scene = LevelSelect(fileNamed:"LevelSelect") as LevelSelect!
+            
+            /* Ensure correct aspect mode */
+            scene.scaleMode = .AspectFill
+            
+            
+            /* Start game scene */
+            skView.presentScene(scene)
+        }
+
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
