@@ -32,10 +32,12 @@ class LevelGenerator {
             var map: [[Int]] = randomMap()
             if isDecent(map) && playThroughLevel(map, playerPosition: CGPoint(x: 0, y: 1), numMoves: 0) {
                 // break out of loop
+                
+                printOutMap(map)
                 let a = gravity(map, x: 0, yy: 1)
                 map = a.map
                 
-                printOutMap(map)
+//                printOutMap(map)
                 var retMap: [[Block]] = []
                 for list in map {
                     var blockList: [Block] = []
@@ -58,16 +60,16 @@ class LevelGenerator {
         // Make new 2d array
         var ret = [[Int]]()
         // 2d zero array
-        ret.append([Int](count: 4, repeatedValue: 0))
-        ret.append([Int](count: 4, repeatedValue: 0))
-        ret.append([Int](count: 4, repeatedValue: 0))
-        ret.append([Int](count: 4, repeatedValue: 0))
+        ret.append([0, 0, 0, 0])
+        ret.append([0, 0, 0, 0])
+        ret.append([0, 1, 0, 0])
+        ret.append([3, 1, 1, 3])
         
-        for (i, list) in ret.enumerate() {
-            for (j, _) in list.enumerate() {
-                ret[i][j] = randomTile()
-            }
-        }
+//        for (i, list) in ret.enumerate() {
+//            for (j, _) in list.enumerate() {
+//                ret[i][j] = randomTile()
+//            }
+//        }
         
         return ret
     }
@@ -98,7 +100,8 @@ class LevelGenerator {
         if(g.won(ret, x: Int(playerPos.x), y: Int(playerPos.y))) {
             return true
         }
-
+        
+        
         
         // escape if too deep
         if numMoves > maxMoves {
@@ -109,8 +112,12 @@ class LevelGenerator {
         // floodgates
         if canMoveLeft(ret, playerPosition: playerPos) {
             let f = moveLeft(ret, playerPosition: playerPos)
+            if ret[Int(f.y)][Int(f.x)] != 0 {
+                return false
+            }
             if playThroughLevel(f.map, playerPosition: CGPoint(x: f.x, y: f.y), numMoves: moves) {
                 print("left, player at:x\(f.x)y\(f.y)")
+                printOutPlayerMap(ret, player: playerPos)
                 return true
             }
             
@@ -125,6 +132,9 @@ class LevelGenerator {
         }
         if canRotateRight(ret, playerPosition: playerPos) {
             let f = rotateRight(ret, playerPosition: playerPos)
+            if ret[Int(f.y)][Int(f.x)] != 0 {
+                return false
+            }
             if playThroughLevel(f.map, playerPosition: CGPoint(x: f.x, y: f.y), numMoves: moves) {
                 print("Before: x = \(playerPos.x), y = \(playerPos.y)")
                 print("rotRight, player at:x\(f.x)y\(f.y)")
@@ -134,6 +144,9 @@ class LevelGenerator {
         }
         if canRotateLeft(ret, playerPosition: playerPos) {
             let f = rotateLeft(ret, playerPosition: playerPos)
+            if ret[Int(f.y)][Int(f.x)] != 0 {
+                return false
+            }
             if playThroughLevel(f.map, playerPosition: CGPoint(x: f.x, y: f.y), numMoves: moves) {
                 print("Before: x = \(playerPos.x), y = \(playerPos.y)")
                 print("rotLeft, player at:x\(f.x)y\(f.y)")
@@ -205,13 +218,13 @@ class LevelGenerator {
         if playerPosition.x < 1 {
             return false
         }
-        if map[Int(playerPosition.y)][Int(playerPosition.x-1)] != 0 {
+        if map[Int(playerPosition.y)][Int(playerPosition.x-1)] == 0 {
             return true
         }
         if playerPosition.x < 2 {
             return false
         }
-        return map[Int(playerPosition.y)][Int(playerPosition.x-2)] != 0
+        return map[Int(playerPosition.y)][Int(playerPosition.x-2)] == 0
     }
     
     func canMoveRight(map: [[Int]], playerPosition: CGPoint) -> Bool {
@@ -219,13 +232,13 @@ class LevelGenerator {
             return false
         }
         
-        if map[Int(playerPosition.y)][Int(playerPosition.x+1)] != 0 {
+        if map[Int(playerPosition.y)][Int(playerPosition.x+1)] == 0 {
             return true
         }
         if Int(playerPosition.x) > map[0].count - 3 {
             return false
         }
-        return map[Int(playerPosition.y)][Int(playerPosition.x+2)] != 0
+        return map[Int(playerPosition.y)][Int(playerPosition.x+2)] == 0
     }
     
     func canRotateLeft(map: [[Int]], playerPosition: CGPoint) -> Bool {
@@ -415,9 +428,34 @@ class LevelGenerator {
         print()
         print("----")
         for list in map {
-            print("\(list[0]), \(list[1]), \(list[2]), \(list[3])")
+            var ln = ""
+            for value in list {
+                ln += "\(value), "
+            }
+            print(ln)
         }
         print("----")
+        print()
+    }
+    
+    func printOutPlayerMap(map: [[Int]], player: CGPoint) {
+        print()
+        print("----")
+        for (y, list) in map.enumerate() {
+            var ln = ""
+            for (x, value) in list.enumerate() {
+                if Int(player.x) == x && Int(player.y) == y {
+                    ln += "*, "
+                } else {
+                ln += "\(value), "
+                }
+            }
+            print(ln)
+        }
+        print("----")
+//        print("PlAYER POSITION: \(player.x) \(player.y)")
+//        print("----")
+        
         print()
     }
 }
