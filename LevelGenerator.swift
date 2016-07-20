@@ -12,9 +12,10 @@ import SpriteKit
 class LevelGenerator {
     
     //how many blocks there are
-    var numBlocks = 4
+    var numBlocks = 7
     var g: GameScene
     var maxMoves = 7
+    var mooves = 0
     
     // Initialize with existing scene
     init(scene: GameScene) {
@@ -28,11 +29,15 @@ class LevelGenerator {
         print("TESTING NEW MAP")
         while true {
             i+=1
+            if i%50000 == 0 {
+                print("Generated another 50,000 levels")
+            }
             // create random Map
             var map: [[Int]] = randomMap()
             if isDecent(map) && playThroughLevel(map, playerPosition: CGPoint(x: 0, y: 1), numMoves: 0) {
                 // break out of loop
-                
+                if checkMoves() {
+                print("BEGINNING OF FUNCTION")
                 printOutMap(map)
                 let a = gravity(map, x: 0, yy: 1)
                 map = a.map
@@ -46,10 +51,11 @@ class LevelGenerator {
                     }
                     retMap.append(blockList)
                 }
+                    
                 // break out of loop
                 print("Generated \(i) levels, and none of them were any good. \nWe might just need to give up and use the last one")
                 return retMap
-                
+                }
             }
             
         }
@@ -57,6 +63,7 @@ class LevelGenerator {
     }
     
     func randomMap() -> [[Int]] {
+        
         // Make new 2d array
         var ret = [[Int]]()
         // 2d zero array
@@ -64,40 +71,49 @@ class LevelGenerator {
         ret.append([0, 0, 0, 0])
         ret.append([0, 1, 0, 0])
         ret.append([3, 1, 1, 3])
-        
-//        for (i, list) in ret.enumerate() {
-//            for (j, _) in list.enumerate() {
-//                ret[i][j] = randomTile()
-//            }
-//        }
+        //print("---ORIGINAL MAP---")
+        //printOutMap(ret)
+        //print("------------------")
+        for (i, list) in ret.enumerate() {
+            for (j, _) in list.enumerate() {
+                ret[i][j] = randomTile()
+            }
+        }
         
         return ret
     }
     
     func randomTile() -> Int {
         // Generate a kind of block randomly
-        return Int(Double(arc4random())/Double(UInt32.max) * Double(numBlocks))
+        var a = Int(Double(arc4random())/Double(UInt32.max) * Double(numBlocks))
+        if a == 5 {
+            a = 0
+        }
+        if a == 6 {
+            a  = 1
+        }
+        return a
     }
     
     // recursively play through level
     func playThroughLevel(map: [[Int]], playerPosition: CGPoint, numMoves: Int) -> Bool {
         var playerPos = playerPosition
-        var ret = map
-        let a = gravity(map, x: Int(playerPosition.x), yy: Int(playerPosition.y))
-        ret = a.map
+        var a = gravity(map, x: Int(playerPosition.x), yy: Int(playerPosition.y))
         playerPos.x = CGFloat(a.x)
         playerPos.y = CGFloat(a.y)
         
         // capped at 7
         var moves = numMoves
         
-        // if dead return
-        if ret[Int(playerPos.y)][Int(playerPos.x)] != 0 {
+        if checkIfDead(a.map, playerPos: playerPos) {
             return false
         }
         
         // success state
-        if(g.won(ret, x: Int(playerPos.x), y: Int(playerPos.y))) {
+        if(g.won(a.map, x: Int(playerPos.x), y: Int(playerPos.y))) {
+            //print("SUCCESS STATE MAP")
+            //printOutMap(a.map)
+            mooves = numMoves
             return true
         }
         
@@ -110,60 +126,66 @@ class LevelGenerator {
         moves += 1
         
         // floodgates
-        if canMoveLeft(ret, playerPosition: playerPos) {
-            let f = moveLeft(ret, playerPosition: playerPos)
-            if ret[Int(f.y)][Int(f.x)] != 0 {
+        if canMoveLeft(a.map, playerPosition: playerPos) {
+            let f = moveLeft(a.map, playerPosition: playerPos)
+            if a.map[Int(f.y)][Int(f.x)] != 0 {
                 return false
             }
             if playThroughLevel(f.map, playerPosition: CGPoint(x: f.x, y: f.y), numMoves: moves) {
                 print("left, player at:x\(f.x)y\(f.y)")
-                printOutPlayerMap(ret, player: playerPos)
+                //printOutPlayerMap(a.map, player: playerPos)
                 return true
             }
             
         }
-        if canMoveRight(ret, playerPosition: playerPos) {
-            let f = moveRight(ret, playerPosition: playerPos)
+        if canMoveRight(a.map, playerPosition: playerPos) {
+            let f = moveRight(a.map, playerPosition: playerPos)
             if playThroughLevel(f.map, playerPosition: CGPoint(x: f.x, y: f.y), numMoves: moves) {
                 print("right, player at:x\(f.x)y\(f.y)")
                 return true
             }
             
         }
-        if canRotateRight(ret, playerPosition: playerPos) {
-            let f = rotateRight(ret, playerPosition: playerPos)
-            if ret[Int(f.y)][Int(f.x)] != 0 {
+        if canRotateRight(a.map, playerPosition: playerPos) {
+            let f = rotateRight(a.map, playerPosition: playerPos)
+            if a.map[Int(f.y)][Int(f.x)] != 0 {
                 return false
             }
             if playThroughLevel(f.map, playerPosition: CGPoint(x: f.x, y: f.y), numMoves: moves) {
-                print("Before: x = \(playerPos.x), y = \(playerPos.y)")
+                //print("Before: x = \(playerPos.x), y = \(playerPos.y)")
                 print("rotRight, player at:x\(f.x)y\(f.y)")
+                if checkIfDead(a.map, playerPos: playerPos) {
+                    return false
+                }
                 return true
             }
             
         }
-        if canRotateLeft(ret, playerPosition: playerPos) {
-            let f = rotateLeft(ret, playerPosition: playerPos)
-            if ret[Int(f.y)][Int(f.x)] != 0 {
+        if canRotateLeft(a.map, playerPosition: playerPos) {
+            let f = rotateLeft(a.map, playerPosition: playerPos)
+            if a.map[Int(f.y)][Int(f.x)] != 0 {
                 return false
             }
             if playThroughLevel(f.map, playerPosition: CGPoint(x: f.x, y: f.y), numMoves: moves) {
-                print("Before: x = \(playerPos.x), y = \(playerPos.y)")
+                //print("Before: x = \(playerPos.x), y = \(playerPos.y)")
                 print("rotLeft, player at:x\(f.x)y\(f.y)")
+                if checkIfDead(a.map, playerPos: playerPos) {
+                    return false
+                }
                 return true
             }
             
         }
-        if canUpRight(ret, playerPosition: playerPos) {
-            let f = moveUpRight(ret, playerPosition: playerPos)
+        if canUpRight(a.map, playerPosition: playerPos) {
+            let f = moveUpRight(a.map, playerPosition: playerPos)
             if playThroughLevel(f.map, playerPosition: CGPoint(x: f.x, y: f.y), numMoves: numMoves) {
                 print("upRight, player at:x\(f.x)y\(f.y)")
                 return true
             }
             
         }
-        if canUpLeft(ret, playerPosition: playerPos) {
-            let f = moveUpLeft(ret, playerPosition: playerPos)
+        if canUpLeft(a.map, playerPosition: playerPos) {
+            let f = moveUpLeft(a.map, playerPosition: playerPos)
             if playThroughLevel(f.map, playerPosition: CGPoint(x: f.x, y: f.y), numMoves: numMoves) {
                 print("upLeft, player at:x\(f.x)y\(f.y)")
                 return true
@@ -173,12 +195,23 @@ class LevelGenerator {
         return false
     }
     
+    func checkMoves() -> Bool {
+        return mooves > 3
+    }
+    
     func isDecent(maap: [[Int]]) -> Bool {
+        
+        
         let a = gravity(maap, x: 0, yy: 1)
+        
+        //print("Before Gravity")
+        //printOutMap(maap)
+        //print("After Gravity")
+        printOutMap(a.map)
         var map = a.map
         var goals = 0
         var connects = 0
-        for list in map {
+        for list in a.map {
             for block in list {
                 if block == 2 {
                     goals += 1
@@ -203,11 +236,11 @@ class LevelGenerator {
         if connects < 2 && goals < 1 {
             return false
         }
-        if g.won(map, x: 1, y: 1) {
+        if g.won(a.map, x: 1, y: 1) {
             return false
         }
         
-        if map[1][0] != 0 || map[0][0] != 0 || map[2][0] != 0{
+        if a.map[1][0] != 0 || a.map[0][0] != 0 || a.map[2][0] != 0{
             return false
         }
         
@@ -401,17 +434,27 @@ class LevelGenerator {
         return (map, playerX, playerY)
     }
     
+    
+   
+    
+    
+    
+    
+    
+
     func gravity(map: [[Int]], x: Int, yy: Int) -> (map: [[Int]], x: Int, y: Int) {
+        //print("Gravitee")
         var y = yy
         var ret = map
         var f = true
+        printOutMap(map)
         while f {
             f = false
             for(i, list) in ret.dropLast().enumerate() {
                 for(j, block) in list.enumerate() {
                     if ret[i+1][j] == 0 && block != 4 && block != 0 {
-                        
-                        ret[i][j] = map[i+1][j]
+                        //print("Gravitying on \(j), \(i)")
+                        ret[i][j] = ret[i+1][j]
                         ret[i+1][j] = block
                         f = true
                     }
@@ -424,18 +467,27 @@ class LevelGenerator {
         return (ret, x, y)
     }
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
     func printOutMap(map: [[Int]]) {
-        print()
-        print("----")
-        for list in map {
-            var ln = ""
-            for value in list {
-                ln += "\(value), "
-            }
-            print(ln)
-        }
-        print("----")
-        print()
+//        print()
+//        print("----")
+//        for list in map {
+//            var ln = ""
+//            for value in list {
+//                ln += "\(value), "
+//            }
+//            print(ln)
+//        }
+//        print("----")
+//        print()
     }
     
     func printOutPlayerMap(map: [[Int]], player: CGPoint) {
@@ -458,6 +510,16 @@ class LevelGenerator {
         
         print()
     }
+    
+    func checkIfDead(map: [[Int]], playerPos: CGPoint) -> Bool {
+        for i in 1...map.count {
+            for j in 1...map[0].count {
+                if i < Int(playerPos.y) && j == Int(playerPos.x) {
+                    return true
+                }
+            }
+        }
+        return false
+        //return map[Int(playerPos.y)][Int(playerPos.x)] != 0
+    }
 }
-
-        

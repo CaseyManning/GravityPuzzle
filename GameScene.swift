@@ -29,6 +29,8 @@ class GameScene: SKScene {
     var restart: MSButtonNode!
     var winned = false
     
+    var random = false
+    
     
     override func didMoveToView(view: SKView) {
         offsetX = -blockSize*2 + 26
@@ -42,7 +44,9 @@ class GameScene: SKScene {
         for _ in -1...level {
             levels.append([])
         }
-        levels[level] = LevelGenerator(scene: self).generateNewLevel()
+        if random {
+            levels[level] = LevelGenerator(scene: self).generateNewLevel()
+        }
         drawLevel()
         drawPlayer()
         player.zPosition = 10
@@ -72,92 +76,160 @@ class GameScene: SKScene {
     
     func loadLevels() {
         
-//        let level0 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 2)]]
-//        
-//        let level1 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 2)]]
-//        
-//        let level2 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
-//                      [Block(id: 1), Block(id: 1), Block(id: 2), Block(id: 1)]]
-//        
-//        let level3 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 2)],
-//                      [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 1)],
-//                      [Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 1)]]
-//
-//        
-//        let level4 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 2)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)]]
-//        
-//        let level5 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 1)],
-//                      [Block(id: 1), Block(id: 1), Block(id: 2), Block(id: 1)]]
-//        
-//        let level6 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 3), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 3)]]
-//        
-//         let level7 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 3)],
-//                       [Block(id: 1), Block(id: 0), Block(id: 3), Block(id: 1)]]
-//
-//        let level8 = [[Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 3), Block(id: 1), Block(id: 3)]]
-//        
-//        let level9 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
-//                      [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 2)]]
-//        
-//        let level10 = [[Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 1)],
-//                       [Block(id: 1), Block(id: 0), Block(id: 1), Block(id: 2)]]
-// 
-//        let level11 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 2)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)]]
-//        
-//        let level13 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)]]
+        let level0 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 2)]]
         
-        //        let level12 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-        //                       [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
-        //                       [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 1)],
-        //                       [Block(id: 1), Block(id: 1), Block(id: 2), Block(id: 1)]]
+        let level1 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 2)]]
         
-//
-//        levels.append(LevelGenerator(scene: self).generateNewLevel())
-//        levels.append(level0)
-//        levels.append(level1)
-//        levels.append(level2)
-//        levels.append(level3)
-//        levels.append(level4)
-//        levels.append(level5)
-//        levels.append(level6)
-//        levels.append(level7)
-//        levels.append(level8)
-//        levels.append(level9)
-//        levels.append(level10)
-//        levels.append(level11)
-//        levels.append(level12)
+        let level2 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
+                      [Block(id: 1), Block(id: 1), Block(id: 2), Block(id: 1)]]
+        
+        let level3 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 2)],
+                      [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 1)],
+                      [Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 1)]]
+
+        
+        let level4 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 2)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)]]
+        
+        let level5 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 1)],
+                      [Block(id: 1), Block(id: 1), Block(id: 2), Block(id: 1)]]
+        
+        let level6 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 3), Block(id: 0), Block(id: 0)],
+                      [Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 3)]]
+        
+         let level7 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 3)],
+                       [Block(id: 1), Block(id: 0), Block(id: 3), Block(id: 1)]]
+
+        let level8 = [[Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                      [Block(id: 0), Block(id: 3), Block(id: 1), Block(id: 3)]]
+        
+        let level9 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
+                      [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 2)]]
+        
+        let level10 = [[Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 1)],
+                       [Block(id: 1), Block(id: 0), Block(id: 1), Block(id: 2)]]
+ 
+        let level11 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 2)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)]]
+        
+        let level13 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 2)]]
+        
+                let level12 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                               [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
+                               [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 1)],
+                               [Block(id: 1), Block(id: 1), Block(id: 2), Block(id: 1)]]
+        
+                let level14 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0)],
+                               [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 4)],
+                               [Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 0)],
+                               [Block(id: 1), Block(id: 0), Block(id: 2), Block(id: 0)]]
+        
+                let level15 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                               [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)],
+                               [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 3)],
+                               [Block(id: 0), Block(id: 1), Block(id: 3), Block(id: 1)]]
+        
+                let level16 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                               [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0)],
+                               [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 1)],
+                               [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 2)]]
+        
+                let level17 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                               [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
+                               [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 2)],
+                               [Block(id: 1), Block(id: 0), Block(id: 1), Block(id: 1)]]
+
+                let level18 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                               [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
+                               [Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 0)],
+                               [Block(id: 1), Block(id: 2), Block(id: 4), Block(id: 0)]]
+        
+                let level19 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 1)],
+                               [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 3)],
+                               [Block(id: 0), Block(id: 3), Block(id: 0), Block(id: 4)],
+                               [Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 0)]]
+        
+       /*need*/ let level20 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                               [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                               [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                               [Block(id: 0), Block(id: 0), Block(id: 2), Block(id: 0)]]
+
+                let level21 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                               [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0)],
+                               [Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 3)],
+                               [Block(id: 1), Block(id: 0), Block(id: 3), Block(id: 1)]]
+        
+                let level22 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                               [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0)],
+                               [Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 3)],
+                               [Block(id: 1), Block(id: 0), Block(id: 3), Block(id: 1)]]
+
+        
+        let level23 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 3)],
+                       [Block(id: 1), Block(id: 0), Block(id: 3), Block(id: 1)]]
+
+
+
+
+
+
+        
+
+        //levels.append(LevelGenerator(scene: self).generateNewLevel())
+        levels.append(level0)
+        levels.append(level1)
+        levels.append(level2)
+        levels.append(level3)
+        levels.append(level4)
+        levels.append(level5)
+        levels.append(level6)
+        levels.append(level7)
+        levels.append(level8)
+        levels.append(level9)
+        levels.append(level10)
+        levels.append(level11)
+        levels.append(level12)
+        levels.append(level13)
+        levels.append(level14)
+        levels.append(level15)
+        levels.append(level16)
+        levels.append(level17)
+        levels.append(level18)
+        levels.append(level19)
+        levels.append(level20)
+        levels.append(level21)
+        levels.append(level22)
+        levels.append(level23)
     }
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -213,7 +285,6 @@ class GameScene: SKScene {
         for(i, list) in levels[level].dropLast().enumerate() {
             for(j, block) in list.enumerate() {
                 if levels[level][i+1][j].id == 0 && block.affectedByGravity == true && block.id != 0 {
-                    block.sprite.removeFromParent()
                     
                     //block.sprite.position.y -= CGFloat(blockSize)
                     //block.sprite.runAction(SKAction(named: "moveDown")
@@ -221,7 +292,6 @@ class GameScene: SKScene {
                     levels[level][i+1][j].sprite.position.y += CGFloat(blockSize)
                     levels[level][i][j] = levels[level][i+1][j]
                     levels[level][i+1][j] = block
-                    levelNode.addChild(block.sprite)
                     f = true
                 }
             }
@@ -376,7 +446,7 @@ class GameScene: SKScene {
     func switchGravity(left: Bool) {
         print("Happy Time X is \(playerX), Y is \(playerY)")
          if left {
-            let action = SKAction.rotateByAngle(CGFloat(π/2), duration: 1)
+            let action = SKAction.rotateByAngle(CGFloat(π/2), duration: 0.6)
             let reset = SKAction.rotateByAngle(CGFloat(-self.π/2), duration: 0)
             let sequence = SKAction.sequence([action, reset, SKAction.runBlock({ () -> Void in
                     
@@ -421,7 +491,7 @@ class GameScene: SKScene {
              levelNode.runAction(sequence)
         } else {
             let reset = SKAction.rotateByAngle(CGFloat(self.π/2), duration: 0)
-             let action = SKAction.rotateByAngle(CGFloat(-π/2), duration: 1)
+             let action = SKAction.rotateByAngle(CGFloat(-π/2), duration: 0.6)
              let sequence = SKAction.sequence([action, reset, SKAction.runBlock({ () -> Void in
                 let M = self.levels[self.level].count
                 let N = self.levels[self.level][0].count
@@ -487,13 +557,13 @@ class GameScene: SKScene {
     }
     
     func drawPlayer() {
-        print("\n\nbefore it all falls apart \(player.position) x\(playerX)y\(playerY)")
+        //print("\n\nbefore it all falls apart \(player.position) x\(playerX)y\(playerY)")
         player.position.x = CGFloat(playerX*blockSize + offsetX)
         // logical height of game
         let logicalHeight = 3 * blockSize + offsetY
         // don't disalign reality
         player.position.y = CGFloat(logicalHeight - playerY*blockSize)
-        print("after it is all thoroughly broken \(player.position)")
+        //print("after it is all thoroughly broken \(player.position)")
     }
     
     func displayHint() {
