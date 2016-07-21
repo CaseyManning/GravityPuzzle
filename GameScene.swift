@@ -29,12 +29,12 @@ class GameScene: SKScene {
     var restart: MSButtonNode!
     var winned = false
     
-    var random = false
+    var random = true
     
     
     override func didMoveToView(view: SKView) {
-        offsetX = -blockSize*2 + 26
-        offsetY = -blockSize*2 + 26
+        offsetX = -blockSize*2 + 36
+        offsetY = -blockSize*2 + 36
         displayHint()
         restart = childNodeWithName("restart") as! MSButtonNode
         switchLeft = childNodeWithName("left") as! MSButtonNode
@@ -65,12 +65,14 @@ class GameScene: SKScene {
         switchLeft.selectedHandler = {self.switchGravity(true)}
         switchRight.selectedHandler = {self.switchGravity(false)}
         
+        if !random {
         if level < 4 {
-            //switchRight.state = .Hidden
+            switchRight.state = .Hidden
         }
     
         if level < 5 {
-            //switchLeft.state = .Hidden
+            switchLeft.state = .Hidden
+        }
         }
     }
     
