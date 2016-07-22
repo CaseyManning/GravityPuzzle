@@ -15,11 +15,12 @@ class LevelSelect: SKScene {
     
     var levels: [MSButtonNode]!
     
-    var numLevels = 10
+    var numLevels = 35
     var l = 0
+    var initialTouchLocation = CGPoint()
     
     override func didMoveToView(view: SKView) {
-        var f: MSButtonNode = childNodeWithName("level1") as! MSButtonNode
+        let f: MSButtonNode = childNodeWithName("level1") as! MSButtonNode
         levels = [MSButtonNode](count: numLevels, repeatedValue: f)
         loadLevels()
     }
@@ -40,5 +41,36 @@ class LevelSelect: SKScene {
                 skView.presentScene(scene)
             }
         }
+    }
+    
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        for touch in touches {
+            initialTouchLocation = touch.locationInNode(self)
+        }
+    }
+    
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        for touch in touches {
+            if touch.locationInNode(self).x > initialTouchLocation.x {
+                camera?.position.x -= 5
+            }
+            if touch.locationInNode(self).x < initialTouchLocation.x {
+                camera?.position.x += 5
+            }
+
+            if touch.locationInNode(self).y > initialTouchLocation.y {
+                camera?.position.y -= 5
+            }
+
+            if touch.locationInNode(self).y < initialTouchLocation.y {
+                camera?.position.y += 5
+            }
+
+        }
+    }
+    
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        
+        
     }
 }

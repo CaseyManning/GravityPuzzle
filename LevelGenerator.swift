@@ -38,7 +38,7 @@ class LevelGenerator {
                 // break out of loop
                 if checkMoves() {
                 print("BEGINNING OF FUNCTION")
-                printOutMap(map)
+               // printOutMap(map)
                 let a = gravity(map, x: 0, yy: 1)
                 map = a.map
                 
@@ -54,6 +54,8 @@ class LevelGenerator {
                     
                 // break out of loop
                 print("Generated \(i) levels, and none of them were any good. \nWe might just need to give up and use the last one")
+                printOutMap(map)
+                    print("NUMMOVES - \(mooves)")
                 return retMap
                 }
             }
@@ -207,8 +209,7 @@ class LevelGenerator {
         //print("Before Gravity")
         //printOutMap(maap)
         //print("After Gravity")
-        printOutMap(a.map)
-        var map = a.map
+        //printOutMap(a.map)
         var goals = 0
         var connects = 0
         for list in a.map {
@@ -447,7 +448,7 @@ class LevelGenerator {
         var y = yy
         var ret = map
         var f = true
-        printOutMap(map)
+        //printOutMap(map)
         while f {
             f = false
             for(i, list) in ret.dropLast().enumerate() {
@@ -477,17 +478,17 @@ class LevelGenerator {
     
     
     func printOutMap(map: [[Int]]) {
-//        print()
-//        print("----")
-//        for list in map {
-//            var ln = ""
-//            for value in list {
-//                ln += "\(value), "
-//            }
-//            print(ln)
-//        }
-//        print("----")
-//        print()
+        print()
+        print("----")
+        for list in map {
+            var ln = ""
+            for value in list {
+                ln += "\(value), "
+            }
+            print(ln)
+        }
+        print("----")
+        print()
     }
     
     func printOutPlayerMap(map: [[Int]], player: CGPoint) {
