@@ -29,8 +29,11 @@ class GameScene: SKScene {
     var restart: MSButtonNode!
     var winned = false
     var direction = -1
+    var levelLabel: SKLabelNode!
+    var bLeft: SKSpriteNode!
+    var bRight: SKSpriteNode!
     
-    var random = true
+    var random = false
     
     
     override func didMoveToView(view: SKView) {
@@ -41,11 +44,13 @@ class GameScene: SKScene {
         player.yScale = 0.22
         player.runAction(SKAction(named: "Idle")!)
             
-            
+        levelLabel = childNodeWithName("level") as! SKLabelNode
         restart = childNodeWithName("restart") as! MSButtonNode
         switchLeft = childNodeWithName("left") as! MSButtonNode
         switchRight = childNodeWithName("right") as! MSButtonNode
         levelNode = childNodeWithName("levelNode")!
+        bLeft = childNodeWithName("bLeft") as! SKSpriteNode
+        bRight = childNodeWithName("bRight") as! SKSpriteNode
         loadLevels()
         for _ in -1...level {
             levels.append([])
@@ -56,6 +61,7 @@ class GameScene: SKScene {
         drawLevel()
         drawPlayer()
         player.zPosition = 10
+        levelLabel.text = String(level)
         
         restart.selectedHandler = {
             let skView = self.view as SKView!
@@ -74,10 +80,12 @@ class GameScene: SKScene {
         if !random {
         if level < 4 {
             switchRight.state = .Hidden
+            bRight.alpha = 0
         }
     
         if level < 5 {
             switchLeft.state = .Hidden
+            bLeft.alpha = 0
         }
         }
     }
@@ -216,7 +224,7 @@ class GameScene: SKScene {
                        [Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 1)],
                        [Block(id: 1), Block(id: 0), Block(id: 2), Block(id: 1)]]
         
-        let level26 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+      /*too hard*/  let level29 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                        [Block(id: 0), Block(id: 3), Block(id: 0), Block(id: 0)],
                        [Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 1)],
                        [Block(id: 3), Block(id: 0), Block(id: 1), Block(id: 1)]]
@@ -231,7 +239,7 @@ class GameScene: SKScene {
                        [Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 4)],
                        [Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 0)]]
         
-        let level29 = [[Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
+        let level26 = [[Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
                        [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 0)],
                        [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 2)],
                        [Block(id: 0), Block(id: 1), Block(id: 4), Block(id: 4)]]
@@ -241,10 +249,10 @@ class GameScene: SKScene {
                        [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 3)],
                        [Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 1)]]
         
-        let level31 = [[Block(id: 1), Block(id: 0), Block(id: 0), Block(id: 0)],
-                       [Block(id: 1), Block(id: 0), Block(id: 0), Block(id: 0)],
-                       [Block(id: 1), Block(id: 3), Block(id: 4), Block(id: 3)],
-                       [Block(id: 1), Block(id: 1), Block(id: 0), Block(id: 1)]]
+        let level31 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 2), Block(id: 0)]]
 
         let level32 = [[Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
                        [Block(id: 0), Block(id: 4), Block(id: 4), Block(id: 0)],
@@ -270,7 +278,16 @@ class GameScene: SKScene {
                        [Block(id: 0), Block(id: 1), Block(id: 4), Block(id: 0)],
                        [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 3)],
                        [Block(id: 1), Block(id: 4), Block(id: 3), Block(id: 4)]]
-
+        
+        let level37 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4)],
+                       [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 3), Block(id: 1)],
+                       [Block(id: 3), Block(id: 0), Block(id: 1), Block(id: 1)]]
+        
+        let level38 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 4)],
+                       [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 4)],
+                       [Block(id: 1), Block(id: 0), Block(id: 1), Block(id: 3)]]
 
 
 
@@ -313,6 +330,8 @@ class GameScene: SKScene {
         levels.append(level34)
         levels.append(level35)
         levels.append(level36)
+        levels.append(level37)
+        levels.append(level38)
         
     }
     
@@ -672,18 +691,61 @@ class GameScene: SKScene {
     }
     
     func displayHint() {
-        if level == 6 {
-            let hint = SKSpriteNode(imageNamed: "hint.png")
-            hint.alpha = 0
-            hint.position = CGPoint(x: 275, y: 255)
+        
+        if level == 0 {
+            
+            let hint = SKSpriteNode(imageNamed: "arrow-left.png")
+            hint.xScale = -1
+            hint.position = CGPoint(x: 275, y: 155)
             hint.zPosition = 20
+            hint.alpha = 0
+            addChild(hint)
+            hint.runAction(SKAction(named: "Fade")!)
+        }
+        
+        if level == 1 {
+            
+            let hint = SKSpriteNode(imageNamed: "arrow-left.png")
+            hint.xScale = -0.6
+            hint.yScale = 0.6
+            hint.position = CGPoint(x: 275, y: 125)
+            hint.zPosition = 20
+            hint.alpha = 0
             addChild(hint)
             hint.runAction(SKAction(named: "Fade")!)
         }
 
-        if level == 5 {
-            let hint = SKSpriteNode(imageNamed: "hint2.png")
-            hint.position = CGPoint(x: 275, y: 255)
+        if level == 2 {
+            
+            let hint = SKSpriteNode(imageNamed: "arrow-left.png")
+            hint.xScale = -0.6
+            hint.yScale = 0.6
+            hint.zRotation = 1
+            hint.position = CGPoint(x: 325, y: 175)
+            hint.zPosition = 20
+            hint.alpha = 0
+            addChild(hint)
+            hint.runAction(SKAction(named: "Fade")!)
+        }
+        if level == 3 {
+            
+            let hint = SKSpriteNode(imageNamed: "arrow-left.png")
+            hint.xScale = -0.6
+            hint.yScale = 0.6
+            hint.zRotation = 1
+            hint.position = CGPoint(x: 175, y: 105)
+            hint.zPosition = 20
+            hint.alpha = 0
+            addChild(hint)
+            hint.runAction(SKAction(named: "Fade")!)
+        }
+        
+        if level == 4 {
+            
+            let hint = SKSpriteNode(imageNamed: "arrow-left.png")
+            hint.xScale = -0.6
+            hint.yScale = 0.6
+            hint.position = CGPoint(x: 450, y: 175)
             hint.zPosition = 20
             hint.alpha = 0
             addChild(hint)
@@ -691,14 +753,6 @@ class GameScene: SKScene {
         }
 
         
-        if level == 0 {
-            let hint = SKSpriteNode(imageNamed: "hint1.png")
-            hint.position = CGPoint(x: 275, y: 255)
-            hint.zPosition = 20
-            hint.alpha = 0
-            addChild(hint)
-            hint.runAction(SKAction(named: "Fade")!)
-        }
     }
     
     
