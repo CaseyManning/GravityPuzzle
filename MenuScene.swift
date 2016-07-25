@@ -28,7 +28,7 @@ class MenuScene: SKScene {
             
             
             /* Start game scene */
-            skView.presentScene(scene)
+            skView.presentScene(scene, transition: SKTransition.crossFadeWithDuration(1))
         }
 
         
@@ -46,7 +46,7 @@ class MenuScene: SKScene {
             
             
             /* Start game scene */
-            skView.presentScene(scene)
+            skView.presentScene(scene, transition: SKTransition.crossFadeWithDuration(1))
         }
 
     }
