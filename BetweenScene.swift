@@ -22,8 +22,7 @@ class BetweenScene: SKScene{
             scene.scaleMode = .AspectFill
             self.level += 1
             scene.level = self.level
-            skView.presentScene(scene)
-
+            skView.presentScene(scene, transition: SKTransition.crossFadeWithDuration(1))
         }
     }
 }

@@ -33,9 +33,9 @@ class GameScene: SKScene {
     var bLeft: SKSpriteNode!
     var bRight: SKSpriteNode!
     var turning = false
-    var random = true
+    var random = false
     var backdrop: SKSpriteNode!
-    
+    var playerUp = 0
     
     override func didMoveToView(view: SKView) {
         offsetX = -blockSize*2 + 36
@@ -44,7 +44,7 @@ class GameScene: SKScene {
         player.xScale = 0.22*CGFloat(direction)
         player.yScale = 0.22
         player.runAction(SKAction(named: "Idle")!)
-            
+        
         levelLabel = childNodeWithName("level") as! SKLabelNode
         restart = childNodeWithName("restart") as! MSButtonNode
         switchLeft = childNodeWithName("left") as! MSButtonNode
@@ -70,7 +70,7 @@ class GameScene: SKScene {
             let scene = GameScene(fileNamed:"GameScene")!
             scene.scaleMode = .AspectFill
             scene.level = self.level
-            skView.presentScene(scene)
+            skView.presentScene(scene, transition: SKTransition.crossFadeWithDuration(1))
             
         }
         
@@ -80,15 +80,15 @@ class GameScene: SKScene {
         switchRight.selectedHandler = {self.switchGravity(false)}
         
         if !random {
-        if level < 4 {
-            switchRight.state = .Hidden
-            bRight.alpha = 0
-        }
-    
-        if level < 5 {
-            switchLeft.state = .Hidden
-            bLeft.alpha = 0
-        }
+            if level < 4 {
+                switchRight.state = .Hidden
+                bRight.alpha = 0
+            }
+            
+            if level < 5 {
+                switchLeft.state = .Hidden
+                bLeft.alpha = 0
+            }
         }
     }
     
@@ -127,8 +127,8 @@ class GameScene: SKScene {
         
         let level6 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-                      [Block(id: 0), Block(id: 3), Block(id: 0), Block(id: 0)],
-                      [Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 3)]]
+                      [Block(id: 0), Block(id: 3), Block(id: 0), Block(id: 3)],
+                      [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 1)]]
         
          let level7 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                        [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
@@ -204,7 +204,6 @@ class GameScene: SKScene {
                        [Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 1)],
                        [Block(id: 0), Block(id: 1), Block(id: 2), Block(id: 4)],
                        [Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 0)]]
-
         
         let level22 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)],
                        [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 1)],
@@ -262,15 +261,15 @@ class GameScene: SKScene {
                        [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
                        [Block(id: 1), Block(id: 0), Block(id: 2), Block(id: 1)]]
 
-        let level33 = [[Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0)],
-                       [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 1)],
-                       [Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 4)],
-                       [Block(id: 1), Block(id: 2), Block(id: 1), Block(id: 0)]]
+       /*knead*/ let level33 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 2), Block(id: 0), Block(id: 0)]]
         
-       /*need*/ let level34 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 1)],
-                       [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 1)],
-                       [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 1)],
-                       [Block(id: 1), Block(id: 2), Block(id: 0), Block(id: 1)]]
+        let level34 = [[Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
+                       [Block(id: 0), Block(id: 3), Block(id: 3), Block(id: 4)],
+                       [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 0)]]
         
         let level35 = [[Block(id: 0), Block(id: 3), Block(id: 0), Block(id: 0)],
                        [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
@@ -301,6 +300,12 @@ class GameScene: SKScene {
 
 
        
+        // 35: 6 moves - 5/10
+        // 36: 6 moves - 6/10
+        // 37: 3 moves - 4/10
+        // 38: 7 moves - 7/10
+        // 39: 15 moves - 9/10
+        
         
         levels.append(level0)
         levels.append(level1)
@@ -394,6 +399,7 @@ class GameScene: SKScene {
     }
     
     func gravity() -> Bool {
+        playerDead()
          //print("X is \(playerX), Y is \(playerY)")
         var f = false
         for(i, list) in levels[level].dropLast().enumerate() {
@@ -408,21 +414,61 @@ class GameScene: SKScene {
                     levels[level][i+1][j] = block
                     f = true
                 }
+            }
+        }
+        for(i, list) in levels[level].enumerate() {
+            for(j, block) in list.enumerate() {
                 if block.id == 5 && i > 0 && levels[level][i-1][j].id == 0 {
-                        print("BLAaanannaaa")
-                        //block.sprite.position.y -= CGFloat(blockSize)
-                        //block.sprite.runAction(SKAction(named: "moveDown")
-                        block.sprite.runAction(SKAction.moveBy(CGVector(dx: 0, dy: blockSize), duration: 0.30))
-                        levels[level][i-1][j].sprite.position.y -= CGFloat(blockSize)
-                        levels[level][i][j] = levels[level][i-1][j]
-                        levels[level][i-1][j] = block
-                        f = true
+                    print("Gravitying shtuff")
+                    //block.sprite.position.y -= CGFloat(blockSize)
+                    //block.sprite.runAction(SKAction(named: "moveDown")
+                    block.sprite.runAction(SKAction.moveBy(CGVector(dx: 0, dy: blockSize), duration: 0.50))
+                    if playerX == j && playerY == i-1 && playerY > 0 {
+                        print("Moving player up")
+                        print("Playerx is \(playerX), and playerY is \(playerY)")
+                        if playerUp == 0 {
+                            playerY -= 1
+                            playerUp += 1
+                            
+                            let sequence = SKAction.sequence([SKAction.moveBy(CGVector(dx: 0, dy: blockSize), duration: 0.50), SKAction.runBlock({ () -> Void in
+                                
+                                self.playerUp -= 1
+                            })])
+                            player.runAction(sequence)
+                        } else if playerUp == 1 {
+                            playerY -= 1
+                            playerUp += 1
+                            player.removeAllActions()
+                            let sequence = SKAction.sequence([SKAction.moveBy(CGVector(dx: 0, dy: blockSize*2), duration: 1), SKAction.runBlock({ () -> Void in
+                                
+                                self.playerUp -= 1
+                            })])
+                            player.runAction(sequence)
+                        } else if playerUp == 2 {
+                            playerY -= 1
+                            playerUp += 1
+                            player.removeAllActions()
+                            let sequence = SKAction.sequence([SKAction.moveBy(CGVector(dx: 0, dy: blockSize*3), duration: 1.5), SKAction.runBlock({ () -> Void in
+                                
+                                self.playerUp -= 1
+                            })])
+                            player.runAction(sequence)
+                        }
+                    }
+                    
+                    levels[level][i-1][j].sprite.position.y -= CGFloat(blockSize)
+                    levels[level][i][j] = levels[level][i-1][j]
+                    levels[level][i-1][j] = block
+                    f = true
+                    playerDead()
                 }
             }
         }
         
         if playerY < 3 {
-            if levels[level][playerY + 1][playerX].id == 0 {
+            if levels[level][playerY + 1][playerX].id == 0 && levels[level][playerY][playerX].id == 0 {
+                print("DOWN DOWN DOWN Block id is \(levels[level][playerY + 1][playerX].id)")
+                printOutPlayerMap(levels[level], player: CGPoint(x: playerX,y: playerY))
                 player.runAction(SKAction.moveBy(CGVector(dx: 0, dy: -blockSize), duration: 0.30))
                 playerY += 1
             }
@@ -434,7 +480,6 @@ class GameScene: SKScene {
     func drawLevel() {
         for(i, list) in levels[level].reverse().enumerate() {
             for(j, block) in list.enumerate() {
-                
                 block.sprite.position = CGPoint(x: j*blockSize, y: i*blockSize)
                 block.sprite.position.x += CGFloat(offsetX)
                 block.sprite.position.y += CGFloat(offsetY)
@@ -685,7 +730,8 @@ class GameScene: SKScene {
         if !dead {
         if levels[level][playerY][playerX].id != 0 {
             dead = true
-            let sequence = SKAction.sequence([SKAction.waitForDuration(0.3), SKAction.runBlock({ () -> Void in
+            print("The player may have died")
+            let sequence = SKAction.sequence([SKAction.waitForDuration(0.6), SKAction.runBlock({ () -> Void in
                 print("You Lose")
                 let skView = self.view as SKView!
                 let scene = GameScene(fileNamed:"GameScene")!
@@ -776,6 +822,26 @@ class GameScene: SKScene {
         
     }
     
+    func printOutPlayerMap(map: [[Block]], player: CGPoint) {
+        print()
+        print("----")
+        for (y, list) in map.enumerate() {
+            var ln = ""
+            for (x, value) in list.enumerate() {
+                if Int(player.x) == x && Int(player.y) == y {
+                    ln += "\(value.id)X "
+                } else {
+                    ln += "\(value.id), "
+                }
+            }
+            print(ln)
+        }
+        print("----")
+        //        print("PlAYER POSITION: \(player.x) \(player.y)")
+        //        print("----")
+        
+        print()
+    }
     
 }
 
