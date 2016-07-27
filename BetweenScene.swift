@@ -15,12 +15,12 @@ class BetweenScene: SKScene{
     var gameManager = GameManager.sharedInstance
     
     override func didMoveToView(view: SKView) {
+        gameManager.level += 1
         button = childNodeWithName("nextLevel") as! MSButtonNode
         button.selectedHandler = {
             let skView = self.view as SKView!
             let scene = GameScene(fileNamed:"GameScene") as GameScene!
             scene.scaleMode = .AspectFill
-            self.gameManager.level += 1
             skView.presentScene(scene, transition: SKTransition.crossFadeWithDuration(1))
         }
     }

@@ -11,8 +11,7 @@ import Foundation
 
 class GameScene: SKScene {
     
-    var lvvvls = [[[Block]]]()
-    var blockSize = 73
+    var levels = [[[Block]]]()
     var player = SKSpriteNode(imageNamed: "idle1.png")
     var playerX = 0
     var playerY = 1
@@ -36,10 +35,13 @@ class GameScene: SKScene {
     var backdrop: SKSpriteNode!
     var playerUp = 0
     var mapSize = 4
+    var blockSize: Int!
     
     let gameManager = GameManager.sharedInstance
     
     override func didMoveToView(view: SKView) {
+        
+        blockSize = 302/mapSize
         offsetX = -blockSize*2 + 36
         offsetY = -blockSize*2 + 36
         displayHint()
@@ -55,17 +57,20 @@ class GameScene: SKScene {
         bLeft = childNodeWithName("bLeft") as! SKSpriteNode
         bRight = childNodeWithName("bRight") as! SKSpriteNode
         backdrop = childNodeWithName("//backdrop") as! SKSpriteNode
-        loadlvvvls()
+        if gameManager.level >= 35 {
+            mapSize = 5
+        }
+        loadlevels()
         for _ in -1...gameManager.level {
-            lvvvls.append([])
+            levels.append([])
         }
         if random {
-            lvvvls[gameManager.level] = LevelGenerator(scene: self).generateNewLevel()
+            levels[gameManager.level] = LevelGenerator(scene: self).generateNewLevel()
         }
         drawLevel()
         drawPlayer()
         player.zPosition = 10
-        levelLabel.text = String(gameManager.level)
+        levelLabel.text = String(gameManager.level + 1)
         
         restart.selectedHandler = {
             let skView = self.view as SKView!
@@ -75,6 +80,8 @@ class GameScene: SKScene {
             skView.presentScene(scene, transition: SKTransition.crossFadeWithDuration(1))
             
         }
+        
+        
         
         levelNode.addChild(player)
         
@@ -94,7 +101,7 @@ class GameScene: SKScene {
         }
     }
     
-    func loadlvvvls() {
+    func loadlevels() {
         
         let level0 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
@@ -298,6 +305,12 @@ class GameScene: SKScene {
                        [Block(id: 0), Block(id: 3), Block(id: 0), Block(id: 0)],
                        [Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 1)],
                        [Block(id: 1), Block(id: 0), Block(id: 3), Block(id: 1)]]
+        
+     let level40 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                    [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                    [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                    [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0)],
+                    [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 0)]]
 
 
 
@@ -314,41 +327,42 @@ class GameScene: SKScene {
         
         
         
-        lvvvls.append(level0)
-        lvvvls.append(level1)
-        lvvvls.append(level2)
-        lvvvls.append(level3)
-        lvvvls.append(level4)
-        lvvvls.append(level5)
-        lvvvls.append(level6)
-        lvvvls.append(level22)
-        lvvvls.append(level8)
-        lvvvls.append(level9)
-        lvvvls.append(level10)
-        lvvvls.append(level7)
-        lvvvls.append(level26)
-        lvvvls.append(level23)
-        lvvvls.append(level12)
-        lvvvls.append(level13)
-        lvvvls.append(level14)
-        lvvvls.append(level19)
-        lvvvls.append(level20)
-        lvvvls.append(level27)
-        lvvvls.append(level37)
-        lvvvls.append(level25)
-        lvvvls.append(level16)
-        lvvvls.append(level30)
-        lvvvls.append(level21)
-        lvvvls.append(level24)
-        lvvvls.append(level35)
-        lvvvls.append(level32)
-        lvvvls.append(level29)
-        lvvvls.append(level18)
-        lvvvls.append(level36)
-        lvvvls.append(level15)
-        lvvvls.append(level17)
-        lvvvls.append(level28)
-        lvvvls.append(level39)
+        levels.append(level0)
+        levels.append(level1)
+        levels.append(level2)
+        levels.append(level3)
+        levels.append(level4)
+        levels.append(level5)
+        levels.append(level6)
+        levels.append(level22)
+        levels.append(level8)
+        levels.append(level9)
+        levels.append(level10)
+        levels.append(level7)
+        levels.append(level26)
+        levels.append(level23)
+        levels.append(level12)
+        levels.append(level13)
+        levels.append(level14)
+        levels.append(level19)
+        levels.append(level20)
+        levels.append(level27)
+        levels.append(level37)
+        levels.append(level25)
+        levels.append(level16)
+        levels.append(level30)
+        levels.append(level21)
+        levels.append(level24)
+        levels.append(level35)
+        levels.append(level32)
+        levels.append(level29)
+        levels.append(level18)
+        levels.append(level36)
+        levels.append(level15)
+        levels.append(level17)
+        levels.append(level28)
+        levels.append(level39)
+        levels.append(level40)
         
         
     }
@@ -384,7 +398,7 @@ class GameScene: SKScene {
         while(gravity()){}
         playerDead()
         
-        if won(lvvvls[gameManager.level], x: playerX, y: playerY) && winned == false{
+        if won(levels[gameManager.level], x: playerX, y: playerY) && winned == false{
             winned = true
             let sequence = SKAction.sequence([SKAction.waitForDuration(1), SKAction.runBlock({ () -> Void in
             print("You Win")
@@ -403,23 +417,23 @@ class GameScene: SKScene {
         playerDead()
          //print("X is \(playerX), Y is \(playerY)")
         var f = false
-        for(i, list) in lvvvls[gameManager.level].dropLast().enumerate() {
+        for(i, list) in levels[gameManager.level].dropLast().enumerate() {
             for(j, block) in list.enumerate() {
-                if lvvvls[gameManager.level][i+1][j].id == 0 && block.affectedByGravity == true && block.id != 0 && block.id != 5 {
+                if levels[gameManager.level][i+1][j].id == 0 && block.affectedByGravity == true && block.id != 0 && block.id != 5 {
                     
                     //block.sprite.position.y -= CGFloat(blockSize)
                     //block.sprite.runAction(SKAction(named: "moveDown")
                     block.sprite.runAction(SKAction.moveBy(CGVector(dx: 0, dy: -blockSize), duration: 0.30))
-                    lvvvls[gameManager.level][i+1][j].sprite.position.y += CGFloat(blockSize)
-                    lvvvls[gameManager.level][i][j] = lvvvls[gameManager.level][i+1][j]
-                    lvvvls[gameManager.level][i+1][j] = block
+                    levels[gameManager.level][i+1][j].sprite.position.y += CGFloat(blockSize)
+                    levels[gameManager.level][i][j] = levels[gameManager.level][i+1][j]
+                    levels[gameManager.level][i+1][j] = block
                     f = true
                 }
             }
         }
-        for(i, list) in lvvvls[gameManager.level].enumerate() {
+        for(i, list) in levels[gameManager.level].enumerate() {
             for(j, block) in list.enumerate() {
-                if block.id == 5 && i > 0 && lvvvls[gameManager.level][i-1][j].id == 0 {
+                if block.id == 5 && i > 0 && levels[gameManager.level][i-1][j].id == 0 {
                     print("Gravitying shtuff")
                     //block.sprite.position.y -= CGFloat(blockSize)
                     //block.sprite.runAction(SKAction(named: "moveDown")
@@ -457,9 +471,9 @@ class GameScene: SKScene {
                         }
                     }
                     
-                    lvvvls[gameManager.level][i-1][j].sprite.position.y -= CGFloat(blockSize)
-                    lvvvls[gameManager.level][i][j] = lvvvls[gameManager.level][i-1][j]
-                    lvvvls[gameManager.level][i-1][j] = block
+                    levels[gameManager.level][i-1][j].sprite.position.y -= CGFloat(blockSize)
+                    levels[gameManager.level][i][j] = levels[gameManager.level][i-1][j]
+                    levels[gameManager.level][i-1][j] = block
                     f = true
                     playerDead()
                 }
@@ -467,9 +481,9 @@ class GameScene: SKScene {
         }
         
         if playerY < mapSize - 1 {
-            if lvvvls[gameManager.level][playerY + 1][playerX].id == 0 && lvvvls[gameManager.level][playerY][playerX].id == 0 {
-                print("DOWN DOWN DOWN Block id is \(lvvvls[gameManager.level][playerY + 1][playerX].id)")
-                printOutPlayerMap(lvvvls[gameManager.level], player: CGPoint(x: playerX,y: playerY))
+            if levels[gameManager.level][playerY + 1][playerX].id == 0 && levels[gameManager.level][playerY][playerX].id == 0 {
+                print("DOWN DOWN DOWN Block id is \(levels[gameManager.level][playerY + 1][playerX].id)")
+                printOutPlayerMap(levels[gameManager.level], player: CGPoint(x: playerX,y: playerY))
                 player.runAction(SKAction.moveBy(CGVector(dx: 0, dy: -blockSize), duration: 0.30))
                 playerY += 1
             }
@@ -479,11 +493,13 @@ class GameScene: SKScene {
     }
     
     func drawLevel() {
-        for(i, list) in lvvvls[gameManager.level].reverse().enumerate() {
+        for(i, list) in levels[gameManager.level].reverse().enumerate() {
             for(j, block) in list.enumerate() {
+                block.sprite.size.width = CGFloat(Double(blockSize) * 1.34)
+                block.sprite.size.height = CGFloat(Double(blockSize) * 1.34)
                 block.sprite.position = CGPoint(x: j*blockSize, y: i*blockSize)
-                block.sprite.position.x += CGFloat(offsetX)
-                block.sprite.position.y += CGFloat(offsetY)
+                block.sprite.position.x += CGFloat(offsetX - 0*(mapSize/5))
+                block.sprite.position.y += CGFloat(offsetY - 0*(mapSize/5))
                 block.sprite.zPosition = 10
                 levelNode.addChild(block.sprite)
             }
@@ -492,7 +508,7 @@ class GameScene: SKScene {
     
     func movePlayer(touch: UITouch) {
         if turning { return }
-        if touch.locationInNode(self).y > initialTouchLocation.y + 50 && playerY > 0 && lvvvls[gameManager.level][playerY-1][playerX].id == 0 {
+        if touch.locationInNode(self).y > initialTouchLocation.y + 50 && playerY > 0 && levels[gameManager.level][playerY-1][playerX].id == 0 {
             player.runAction(SKAction.moveBy(CGVector(dx: 0, dy: blockSize), duration: 0.15))
             playerY -= 1
             direction = -1
@@ -502,21 +518,21 @@ class GameScene: SKScene {
 
         
         if touch.locationInNode(self).x > initialTouchLocation.x + 40 && playerX < mapSize - 1 {
-            //print(lvvvls[gameManager.level][playerY][playerX+1].id)
-            if lvvvls[gameManager.level][playerY][playerX+1].id == 0 {
+            //print(levels[gameManager.level][playerY][playerX+1].id)
+            if levels[gameManager.level][playerY][playerX+1].id == 0 {
                 player.runAction(SKAction.moveBy(CGVector(dx: blockSize, dy: 0), duration: 0.10))
                 playerX += 1
                 direction = -1
                 player.xScale = 0.22*CGFloat(direction)
             } else if playerX < 2 {
-               if lvvvls[gameManager.level][playerY][playerX+2].id == 0 && lvvvls[gameManager.level][playerY][playerX+1].id != 4{
+               if levels[gameManager.level][playerY][playerX+2].id == 0 && levels[gameManager.level][playerY][playerX+1].id != 4{
                     player.runAction(SKAction.moveBy(CGVector(dx: blockSize, dy: 0), duration: 0.10))
                     
-                    lvvvls[gameManager.level][playerY][playerX+1].sprite.runAction(SKAction.moveBy(CGVector(dx: blockSize, dy: 0), duration: 0.07))
-                    lvvvls[gameManager.level][playerY][playerX+2].sprite.runAction(SKAction.moveBy(CGVector(dx: -blockSize, dy: 0), duration: 0.02))
-                    let b = Block(id: lvvvls[gameManager.level][playerY][playerX+2].id)
-                    lvvvls[gameManager.level][playerY][playerX+2] = lvvvls[gameManager.level][playerY][playerX+1]
-                    lvvvls[gameManager.level][playerY][playerX+1] = b
+                    levels[gameManager.level][playerY][playerX+1].sprite.runAction(SKAction.moveBy(CGVector(dx: blockSize, dy: 0), duration: 0.07))
+                    levels[gameManager.level][playerY][playerX+2].sprite.runAction(SKAction.moveBy(CGVector(dx: -blockSize, dy: 0), duration: 0.02))
+                    let b = Block(id: levels[gameManager.level][playerY][playerX+2].id)
+                    levels[gameManager.level][playerY][playerX+2] = levels[gameManager.level][playerY][playerX+1]
+                    levels[gameManager.level][playerY][playerX+1] = b
                     playerX += 1
                 direction = -1
                 player.xScale = 0.22*CGFloat(direction)
@@ -525,22 +541,22 @@ class GameScene: SKScene {
         }
         
         if touch.locationInNode(self).x < initialTouchLocation.x - 40 && playerX > 0 {
-            print(lvvvls[gameManager.level][playerY][playerX-1].id)
-            if lvvvls[gameManager.level][playerY][playerX-1].id == 0 {
+            print(levels[gameManager.level][playerY][playerX-1].id)
+            if levels[gameManager.level][playerY][playerX-1].id == 0 {
                 player.runAction(SKAction.moveBy(CGVector(dx: -blockSize, dy: 0), duration: 0.10))
                 playerX -= 1
                 direction = 1
                 player.xScale = 0.22*CGFloat(direction)
 
             } else if playerX > 1 {
-               if lvvvls[gameManager.level][playerY][playerX-2].id == 0 && lvvvls[gameManager.level][playerY][playerX-1].id != 4{
+               if levels[gameManager.level][playerY][playerX-2].id == 0 && levels[gameManager.level][playerY][playerX-1].id != 4{
                     player.runAction(SKAction.moveBy(CGVector(dx: -blockSize, dy: 0), duration: 0.10))
                     
-                    lvvvls[gameManager.level][playerY][playerX-1].sprite.runAction(SKAction.moveBy(CGVector(dx: -blockSize, dy: 0), duration: 0.07))
-                    lvvvls[gameManager.level][playerY][playerX-2].sprite.runAction(SKAction.moveBy(CGVector(dx: blockSize, dy: 0), duration: 0.02))
-                    let b = Block(id: lvvvls[gameManager.level][playerY][playerX-2].id)
-                    lvvvls[gameManager.level][playerY][playerX-2] = lvvvls[gameManager.level][playerY][playerX-1]
-                    lvvvls[gameManager.level][playerY][playerX-1] = b
+                    levels[gameManager.level][playerY][playerX-1].sprite.runAction(SKAction.moveBy(CGVector(dx: -blockSize, dy: 0), duration: 0.07))
+                    levels[gameManager.level][playerY][playerX-2].sprite.runAction(SKAction.moveBy(CGVector(dx: blockSize, dy: 0), duration: 0.02))
+                    let b = Block(id: levels[gameManager.level][playerY][playerX-2].id)
+                    levels[gameManager.level][playerY][playerX-2] = levels[gameManager.level][playerY][playerX-1]
+                    levels[gameManager.level][playerY][playerX-1] = b
                     playerX -= 1
                     direction = 1
                     player.xScale = 0.22*CGFloat(direction)
@@ -633,11 +649,11 @@ class GameScene: SKScene {
             let reset = SKAction.rotateByAngle(CGFloat(-self.π/2), duration: 0)
             let sequence = SKAction.sequence([action, reset, SKAction.runBlock({ () -> Void in
                     
-                    let M = self.lvvvls[self.gameManager.level].count
-                    let N = self.lvvvls[self.gameManager.level][0].count
+                    let M = self.levels[self.gameManager.level].count
+                    let N = self.levels[self.gameManager.level][0].count
                     
                     
-                    for(_, list) in self.lvvvls[self.gameManager.level].enumerate() {
+                    for(_, list) in self.levels[self.gameManager.level].enumerate() {
                         for(_, block) in list.enumerate() {
                             block.sprite.removeFromParent()
                         }
@@ -649,20 +665,19 @@ class GameScene: SKScene {
                     //print(M)
                     //print(N)
                     var ret = [[Int]]()
-                    ret.append([Int](count: N, repeatedValue: 0))
-                    ret.append([Int](count: N, repeatedValue: 0))
-                    ret.append([Int](count: N, repeatedValue: 0))
-                    ret.append([Int](count: N, repeatedValue: 0))
+                    for _ in 1...self.mapSize {
+                        ret.append([Int](count: N, repeatedValue: 0))
+                    }
                     for r in 0...M-1 {
                         for c in 0...N-1 {
                             //print(M-1-r)
-                            ret[N-1-c][r] = self.lvvvls[self.gameManager.level][r][c].id
+                            ret[N-1-c][r] = self.levels[self.gameManager.level][r][c].id
                         }
                     }
                     
                     for(i, list) in ret.enumerate() {
                         for(j, block) in list.enumerate() {
-                            self.lvvvls[self.gameManager.level][i][j] = Block(id:block)
+                            self.levels[self.gameManager.level][i][j] = Block(id:block)
                         }
                     }
                 let x = self.playerX
@@ -679,10 +694,10 @@ class GameScene: SKScene {
             let reset = SKAction.rotateByAngle(CGFloat(self.π/2), duration: 0)
              let action = SKAction.rotateByAngle(CGFloat(-π/2), duration: 0.6)
              let sequence = SKAction.sequence([action, reset, SKAction.runBlock({ () -> Void in
-                let M = self.lvvvls[self.gameManager.level].count
-                let N = self.lvvvls[self.gameManager.level][0].count
+                let M = self.levels[self.gameManager.level].count
+                let N = self.levels[self.gameManager.level][0].count
                 
-                for(_, list) in self.lvvvls[self.gameManager.level].enumerate() {
+                for(_, list) in self.levels[self.gameManager.level].enumerate() {
                     for(_, block) in list.enumerate() {
                         block.sprite.removeFromParent()
                     }
@@ -693,20 +708,19 @@ class GameScene: SKScene {
                 // print(M)
                 //print(N)
                 var ret = [[Int]]()
-                ret.append([Int](count: N, repeatedValue: 0))
-                ret.append([Int](count: N, repeatedValue: 0))
-                ret.append([Int](count: N, repeatedValue: 0))
-                ret.append([Int](count: N, repeatedValue: 0))
+                for _ in 1...self.mapSize {
+                    ret.append([Int](count: N, repeatedValue: 0))
+                }
                 for r in 0...M-1 {
                     for c in 0...N-1 {
                         //print(M-1-r)
-                        ret[c][M-1-r] = self.lvvvls[self.gameManager.level][r][c].id;
+                        ret[c][M-1-r] = self.levels[self.gameManager.level][r][c].id;
                     }
                 }
                 
                 for(i, list) in ret.enumerate() {
                     for(j, block) in list.enumerate() {
-                        self.lvvvls[self.gameManager.level][i][j] = Block(id:block)
+                        self.levels[self.gameManager.level][i][j] = Block(id:block)
                     }
                 }
                 
@@ -729,7 +743,7 @@ class GameScene: SKScene {
     
     func playerDead() {
         if !dead {
-            if lvvvls[gameManager.level][playerY][playerX].id != 0 {
+            if levels[gameManager.level][playerY][playerX].id != 0 {
             dead = true
             print("The player may have died")
             let sequence = SKAction.sequence([SKAction.waitForDuration(0.6), SKAction.runBlock({ () -> Void in
@@ -747,13 +761,20 @@ class GameScene: SKScene {
     }
     
     func drawPlayer() {
+        
+        //within
+        //instant crush
+        
         //print("\n\nbefore it all falls apart \(player.position) x\(playerX)y\(playerY)")
         player.position.x = CGFloat(playerX*blockSize + offsetX)
         // logical height of game
         let logicalHeight = mapSize - 1 * blockSize + offsetY
         // don't disalign reality
-        player.position.y = CGFloat(logicalHeight - playerY*blockSize + 285)
+        player.position.y = CGFloat(logicalHeight - playerY*blockSize + 290)
         //print("after it is all thoroughly broken \(player.position)")
+        if gameManager.level >= 35 {
+            player.position.y += 70
+        }
     }
     
     func displayHint() {
