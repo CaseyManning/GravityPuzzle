@@ -37,7 +37,6 @@ class LevelSelect: SKScene {
                 let skView = self.view as SKView!
                 let scene = GameScene(fileNamed:"GameScene")!
                 scene.scaleMode = .AspectFill
-                scene.level = i
                 skView.presentScene(scene, transition:SKTransition.crossFadeWithDuration(1))
             }
         }

@@ -11,8 +11,8 @@ import SpriteKit
 
 class BetweenScene: SKScene{
     
-    var level = 0
     var button: MSButtonNode!
+    var gameManager = GameManager.sharedInstance
     
     override func didMoveToView(view: SKView) {
         button = childNodeWithName("nextLevel") as! MSButtonNode
@@ -20,8 +20,7 @@ class BetweenScene: SKScene{
             let skView = self.view as SKView!
             let scene = GameScene(fileNamed:"GameScene") as GameScene!
             scene.scaleMode = .AspectFill
-            self.level += 1
-            scene.level = self.level
+            self.gameManager.level += 1
             skView.presentScene(scene, transition: SKTransition.crossFadeWithDuration(1))
         }
     }

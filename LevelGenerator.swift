@@ -16,6 +16,7 @@ class LevelGenerator {
     var g: GameScene
     var maxMoves = 7
     var mooves = 0
+    var mapSize = 4
     
     // Initialize with existing scene
     init(scene: GameScene) {
@@ -92,7 +93,10 @@ class LevelGenerator {
             a = 0
         }
         if a == 6 {
-            a  = 1
+            a = 1
+        }
+        if a == 7 || a == 8 {
+            a = 6
         }
         return a
     }
@@ -513,6 +517,7 @@ class LevelGenerator {
     }
     
     func checkIfDead(map: [[Int]], playerPos: CGPoint) -> Bool {
+        
         for i in 1...map.count {
             for j in 1...map[0].count {
                 if i < Int(playerPos.y) && j == Int(playerPos.x) {

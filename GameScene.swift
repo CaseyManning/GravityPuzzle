@@ -749,9 +749,7 @@ class GameScene: SKScene {
         //print("\n\nbefore it all falls apart \(player.position) x\(playerX)y\(playerY)")
         player.position.x = CGFloat(playerX*blockSize + offsetX)
         // logical height of game
-        let logicalHeight = 3 * blockSize + offsetY
         // don't disalign reality
-        player.position.y = CGFloat(logicalHeight - playerY*blockSize)
         //print("after it is all thoroughly broken \(player.position)")
     }
     
@@ -818,7 +816,6 @@ class GameScene: SKScene {
             hint.runAction(SKAction(named: "Fade")!)
             hint.runAction(SKAction(named: "BackForth")!)
         }
-
         
     }
     
