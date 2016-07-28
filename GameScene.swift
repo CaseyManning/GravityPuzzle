@@ -31,22 +31,22 @@ class GameScene: SKScene {
     var bLeft: SKSpriteNode!
     var bRight: SKSpriteNode!
     var turning = false
-    var random = false
+    var random = true
     var backdrop: SKSpriteNode!
     var playerUp = 0
     var mapSize = 4
     var blockSize: Int!
+    var numDeaths = 0
     
     let gameManager = GameManager.sharedInstance
     
     override func didMoveToView(view: SKView) {
         
-        blockSize = 302/mapSize
-        offsetX = -blockSize*2 + 36
-        offsetY = -blockSize*2 + 36
+        
+        
         displayHint()
-        player.xScale = 0.22*CGFloat(direction)
-        player.yScale = 0.22
+        player.xScale = 0.22*CGFloat(direction) - CGFloat(Double(direction)*0.03*Double(Int(mapSize/5)))
+        player.yScale = 0.22 - CGFloat(Double(direction)*0.04*Double(Int(mapSize/5)))
         player.runAction(SKAction(named: "Idle")!)
         
         levelLabel = childNodeWithName("level") as! SKLabelNode
@@ -57,9 +57,12 @@ class GameScene: SKScene {
         bLeft = childNodeWithName("bLeft") as! SKSpriteNode
         bRight = childNodeWithName("bRight") as! SKSpriteNode
         backdrop = childNodeWithName("//backdrop") as! SKSpriteNode
-        if gameManager.level >= 35 {
+        if gameManager.level >= 35 || random {
             mapSize = 5
         }
+        blockSize = 302/mapSize
+        offsetX = -blockSize*2 + 36
+        offsetY = -blockSize*2 + 36
         loadlevels()
         for _ in -1...gameManager.level {
             levels.append([])
@@ -158,11 +161,6 @@ class GameScene: SKScene {
                        [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                        [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 1)],
                        [Block(id: 1), Block(id: 0), Block(id: 1), Block(id: 2)]]
- 
-        let level11 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 2)],
-                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)],
-                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)],
-                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)]]
         
         let level12 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                        [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0)],
@@ -260,25 +258,10 @@ class GameScene: SKScene {
                        [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 3)],
                        [Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 1)]]
         
-        let level31 = [[Block(id: 0), Block(id: 0), Block(id: 2), Block(id: 4)],
-                       [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0)],
-                       [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0)],
-                       [Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 0)]]
-
         let level32 = [[Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
                        [Block(id: 0), Block(id: 4), Block(id: 4), Block(id: 0)],
                        [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
                        [Block(id: 1), Block(id: 0), Block(id: 2), Block(id: 1)]]
-
-       /*knead*/ let level33 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-                       [Block(id: 0), Block(id: 2), Block(id: 0), Block(id: 0)]]
-        
-        let level34 = [[Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
-                       [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
-                       [Block(id: 0), Block(id: 3), Block(id: 3), Block(id: 4)],
-                       [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 0)]]
         
         let level35 = [[Block(id: 0), Block(id: 3), Block(id: 0), Block(id: 0)],
                        [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
@@ -295,12 +278,6 @@ class GameScene: SKScene {
                        [Block(id: 0), Block(id: 0), Block(id: 3), Block(id: 1)],
                        [Block(id: 3), Block(id: 0), Block(id: 1), Block(id: 1)]]
         
-        let level38 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 4)],
-                       [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
-                       [Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 4)],
-                       [Block(id: 1), Block(id: 0), Block(id: 1), Block(id: 3)]]
-        
-        
         let level39 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                        [Block(id: 0), Block(id: 3), Block(id: 0), Block(id: 0)],
                        [Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 1)],
@@ -308,9 +285,28 @@ class GameScene: SKScene {
         
      let level40 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                     [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-                    [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-                    [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0)],
-                    [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 0)]]
+                    [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 1)],
+                    [Block(id: 3), Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 4)],
+                    [Block(id: 1), Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 4)]]
+        
+        let level41 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)]]
+        
+        let level42 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 1)],
+                       [Block(id: 3), Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 4)],
+                       [Block(id: 1), Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 4)]]
+        
+        let level43 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 1)],
+                       [Block(id: 3), Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 4)],
+                       [Block(id: 1), Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 4)]]
+
 
 
 
@@ -363,6 +359,9 @@ class GameScene: SKScene {
         levels.append(level28)
         levels.append(level39)
         levels.append(level40)
+        levels.append(level41)
+        levels.append(level42)
+        levels.append(level43)
         
         
     }
@@ -382,7 +381,6 @@ class GameScene: SKScene {
         let scene = BetweenScene(fileNamed:"BetweenScene")!
         scene.scaleMode = .AspectFill
         skView.presentScene(scene)
-
     }
     
     
@@ -493,13 +491,16 @@ class GameScene: SKScene {
     }
     
     func drawLevel() {
+        print(Double(blockSize) * 4/Double(mapSize))
+        //player.size.height = CGFloat(blockSize)
+        //player.size.width = CGFloat(blockSize)
         for(i, list) in levels[gameManager.level].reverse().enumerate() {
             for(j, block) in list.enumerate() {
-                block.sprite.size.width = CGFloat(Double(blockSize) * 1.34)
-                block.sprite.size.height = CGFloat(Double(blockSize) * 1.34)
+                block.sprite.size.width = CGFloat(blockSize)
+                block.sprite.size.height = CGFloat(blockSize)
                 block.sprite.position = CGPoint(x: j*blockSize, y: i*blockSize)
-                block.sprite.position.x += CGFloat(offsetX - 0*(mapSize/5))
-                block.sprite.position.y += CGFloat(offsetY - 0*(mapSize/5))
+                block.sprite.position.x += CGFloat(offsetX - 38*(mapSize/5))
+                block.sprite.position.y += CGFloat(offsetY - 38*(mapSize/5))
                 block.sprite.zPosition = 10
                 levelNode.addChild(block.sprite)
             }
@@ -507,12 +508,13 @@ class GameScene: SKScene {
     }
     
     func movePlayer(touch: UITouch) {
+        print(CGFloat(Double(direction)*0.04*Double(Int(mapSize/5))))
         if turning { return }
         if touch.locationInNode(self).y > initialTouchLocation.y + 50 && playerY > 0 && levels[gameManager.level][playerY-1][playerX].id == 0 {
             player.runAction(SKAction.moveBy(CGVector(dx: 0, dy: blockSize), duration: 0.15))
             playerY -= 1
             direction = -1
-            player.xScale = 0.22*CGFloat(direction)
+            player.xScale = 0.22*CGFloat(direction) - CGFloat(Double(direction)*0.03*Double(Int(mapSize/5)))
 
         }
 
@@ -523,7 +525,7 @@ class GameScene: SKScene {
                 player.runAction(SKAction.moveBy(CGVector(dx: blockSize, dy: 0), duration: 0.10))
                 playerX += 1
                 direction = -1
-                player.xScale = 0.22*CGFloat(direction)
+                player.xScale = 0.22*CGFloat(direction) - CGFloat(Double(direction)*0.03*Double(Int(mapSize/5)))
             } else if playerX < 2 {
                if levels[gameManager.level][playerY][playerX+2].id == 0 && levels[gameManager.level][playerY][playerX+1].id != 4{
                     player.runAction(SKAction.moveBy(CGVector(dx: blockSize, dy: 0), duration: 0.10))
@@ -535,7 +537,7 @@ class GameScene: SKScene {
                     levels[gameManager.level][playerY][playerX+1] = b
                     playerX += 1
                 direction = -1
-                player.xScale = 0.22*CGFloat(direction)
+                player.xScale = 0.22*CGFloat(direction) - CGFloat(Double(direction)*0.03*Double(Int(mapSize/5)))
                 }
             }
         }
@@ -546,7 +548,7 @@ class GameScene: SKScene {
                 player.runAction(SKAction.moveBy(CGVector(dx: -blockSize, dy: 0), duration: 0.10))
                 playerX -= 1
                 direction = 1
-                player.xScale = 0.22*CGFloat(direction)
+                player.xScale = 0.22*CGFloat(direction) - CGFloat(Double(direction)*0.03*Double(Int(mapSize/5)))
 
             } else if playerX > 1 {
                if levels[gameManager.level][playerY][playerX-2].id == 0 && levels[gameManager.level][playerY][playerX-1].id != 4{
@@ -559,7 +561,7 @@ class GameScene: SKScene {
                     levels[gameManager.level][playerY][playerX-1] = b
                     playerX -= 1
                     direction = 1
-                    player.xScale = 0.22*CGFloat(direction)
+                    player.xScale = 0.22*CGFloat(direction) - CGFloat(Double(direction)*0.03*Double(Int(mapSize/5)))
                 }
             }
         }
@@ -750,6 +752,7 @@ class GameScene: SKScene {
                 print("You Lose")
                 let skView = self.view as SKView!
                 let scene = GameScene(fileNamed:"GameScene")!
+                scene.numDeaths = self.numDeaths + 1
                 scene.scaleMode = .AspectFill
                 scene.gameManager.level = self.gameManager.level
                 skView.presentScene(scene, transition:SKTransition.crossFadeWithDuration(1))
@@ -762,9 +765,6 @@ class GameScene: SKScene {
     
     func drawPlayer() {
         
-        //within
-        //instant crush
-        
         //print("\n\nbefore it all falls apart \(player.position) x\(playerX)y\(playerY)")
         player.position.x = CGFloat(playerX*blockSize + offsetX)
         // logical height of game
@@ -772,8 +772,9 @@ class GameScene: SKScene {
         // don't disalign reality
         player.position.y = CGFloat(logicalHeight - playerY*blockSize + 290)
         //print("after it is all thoroughly broken \(player.position)")
-        if gameManager.level >= 35 {
-            player.position.y += 70
+        if gameManager.level >= 35 || random {
+            player.position.x -= 40
+             player.position.y -= 35
         }
     }
     

@@ -16,7 +16,7 @@ class LevelGenerator {
     var g: GameScene
     var maxMoves = 7
     var mooves = 0
-    var mapSize = 4
+    var mapSize = 5
     
     // Initialize with existing scene
     init(scene: GameScene) {
@@ -70,10 +70,11 @@ class LevelGenerator {
         // Make new 2d array
         var ret = [[Int]]()
         // 2d zero array
-        ret.append([0, 0, 0, 0])
-        ret.append([0, 0, 0, 0])
-        ret.append([0, 1, 0, 0])
-        ret.append([3, 1, 1, 3])
+        ret.append([0, 0, 0, 0, 0])
+        ret.append([0, 0, 0, 0, 0])
+        ret.append([0, 1, 0, 0, 0])
+        ret.append([0, 1, 0, 0, 0])
+        ret.append([3, 1, 1, 3, 0])
         //print("---ORIGINAL MAP---")
         //printOutMap(ret)
         //print("------------------")
@@ -273,7 +274,7 @@ class LevelGenerator {
         if map[Int(playerPosition.y)][Int(playerPosition.x+1)] == 0 {
             return true
         }
-        if Int(playerPosition.x) > map[0].count - 3 {
+        if Int(playerPosition.x) > map[0].count - mapSize - 1 {
             return false
         }
         return map[Int(playerPosition.y)][Int(playerPosition.x+2)] == 0
@@ -379,7 +380,7 @@ class LevelGenerator {
         let x = playerX
         let y = playerY
         playerX = y
-        playerY = 3 - x
+        playerY = mapSize - 1 - x
         
         return (happyMap, playerX, playerY)
     }
@@ -415,7 +416,7 @@ class LevelGenerator {
         }
         let x = playerX
         let y = playerY
-        playerX = 3 - y
+        playerX = mapSize - 1 - y
         playerY = x
         //print("Before: x = \(x), y = \(y)")
         //print("After: x = \(playerX), y = \(playerY)")

@@ -18,6 +18,7 @@ class LevelSelect: SKScene {
     var numLevels = 35
     var l = 0
     var initialTouchLocation = CGPoint()
+    var touching = false
     
     override func didMoveToView(view: SKView) {
         let f: MSButtonNode = childNodeWithName("level1") as! MSButtonNode
@@ -47,30 +48,36 @@ class LevelSelect: SKScene {
         for touch in touches {
             initialTouchLocation = touch.locationInNode(self)
         }
+        touching = true
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch in touches {
-            if touch.locationInNode(self).x > initialTouchLocation.x {
-                camera?.position.x -= 5
-            }
-            if touch.locationInNode(self).x < initialTouchLocation.x {
-                camera?.position.x += 5
-            }
-
-            if touch.locationInNode(self).y > initialTouchLocation.y {
-                camera?.position.y -= 5
-            }
-
-            if touch.locationInNode(self).y < initialTouchLocation.y {
-                camera?.position.y += 5
-            }
-
+        let loc = touch.locationInNode(self)
+        camera?.physicsBody?.velocity.dx = (initialTouchLocation.x - loc.x)*3
+        camera?.physicsBody?.velocity.dy = (initialTouchLocation.y - loc.y)*3
         }
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        touching = false
         
-        
+    }
+    
+    override func update(currentTime: NSTimeInterval) {
+        for _ in 1...5 {
+        if camera?.physicsBody?.velocity.dy > 0 {
+            camera?.physicsBody?.velocity.dy -= 1
+        }
+        if camera?.physicsBody?.velocity.dy < 0 {
+            camera?.physicsBody?.velocity.dy += 1
+        }
+            if camera?.physicsBody?.velocity.dx > 0 {
+                camera?.physicsBody?.velocity.dx -= 1
+            }
+            if camera?.physicsBody?.velocity.dx < 0 {
+                camera?.physicsBody?.velocity.dx += 1
+            }
+        }
     }
 }
