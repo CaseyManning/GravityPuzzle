@@ -31,7 +31,7 @@ class GameScene: SKScene {
     var bLeft: SKSpriteNode!
     var bRight: SKSpriteNode!
     var turning = false
-    var random = true
+    var random = false
     var backdrop: SKSpriteNode!
     var playerUp = 0
     var mapSize = 4
@@ -285,42 +285,33 @@ class GameScene: SKScene {
         
      let level40 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                     [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-                    [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 1)],
-                    [Block(id: 3), Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 4)],
-                    [Block(id: 1), Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 4)]]
+                    [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                    [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                    [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 2), Block(id: 0)]]
         
         let level41 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                        [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                        [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)]]
+                       [Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 2), Block(id: 0)]]
         
-        let level42 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 1)],
-                       [Block(id: 3), Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 4)],
-                       [Block(id: 1), Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 4)]]
+        let level42 = [[Block(id: 4), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 3)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 4)],
+                       [Block(id: 0), Block(id: 2), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 4), Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 3), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 4)]]
         
         let level43 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                        [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 1)],
-                       [Block(id: 3), Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 4)],
-                       [Block(id: 1), Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 4)]]
-
-
-
-
-       
-        // 35: 6 moves - 5/10
-        // 36: 6 moves - 6/10
-        // 37: 3 moves - 4/10
-        // 38: 7 moves - 7/10
-        // 39: 15 moves - 9/10
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 2), Block(id: 0), Block(id: 0)]]
         
-        
-        
-        
-        
+        let level44 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 2), Block(id: 0), Block(id: 0)]]
         
         
         levels.append(level0)
@@ -362,6 +353,7 @@ class GameScene: SKScene {
         levels.append(level41)
         levels.append(level42)
         levels.append(level43)
+        levels.append(level44)
         
         
     }
@@ -399,7 +391,7 @@ class GameScene: SKScene {
         if won(levels[gameManager.level], x: playerX, y: playerY) && winned == false{
             winned = true
             let sequence = SKAction.sequence([SKAction.waitForDuration(1), SKAction.runBlock({ () -> Void in
-            print("You Win")
+            print("You Win level \(self.gameManager.level)")
             
             let skView = self.view as SKView!
             let scene = BetweenScene(fileNamed:"BetweenScene")!
