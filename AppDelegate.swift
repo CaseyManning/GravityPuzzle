@@ -34,6 +34,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        Mixpanel.sharedInstanceWithToken("3ac4eaa0e0773d7222617ce141f6f607")
+        let mixpanel: Mixpanel = Mixpanel.sharedInstance()
+        mixpanel.track("App closed", properties: ["level": GameManager.sharedInstance.level])
+
          GameManager.sharedInstance.saveData()
         
     }
