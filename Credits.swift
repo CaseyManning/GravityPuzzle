@@ -16,7 +16,7 @@ class Credits: SKScene {
         super.didMoveToView(view)
         print("Credits seen")
 //        
-        let sequence = SKAction.sequence([SKAction.waitForDuration(8), SKAction.runBlock({ () -> Void in
+        let sequence = SKAction.sequence([SKAction.waitForDuration(5), SKAction.runBlock({ () -> Void in
         let skView = self.view
         let scene = MenuScene(fileNamed:"MenuScene")!
         scene.scaleMode = .AspectFill

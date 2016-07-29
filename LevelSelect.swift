@@ -29,7 +29,7 @@ class LevelSelect: SKScene {
     func loadLevels() {
         
         for i in 0...numLevels - 1 {
-            levels[i] = childNodeWithName("level\(i)") as! MSButtonNode
+            levels[i] = childNodeWithName("lev\(i)") as! MSButtonNode
         }
         
         for (i,level) in levels.enumerate() {
