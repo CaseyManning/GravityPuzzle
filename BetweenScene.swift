@@ -11,7 +11,7 @@ import SpriteKit
 
 class BetweenScene: SKScene{
     
-    var button: MSButtonNode!
+    var button: MSButtonNode2!
     var gameManager = GameManager.sharedInstance
     
     override func didMoveToView(view: SKView) {
@@ -27,7 +27,8 @@ class BetweenScene: SKScene{
             return
         }
         gameManager.level += 1
-        button = childNodeWithName("nextLevel") as! MSButtonNode
+        button = childNodeWithName("nextLevel") as! MSButtonNode2
+        button.link = childNodeWithName("foo") as! SKSpriteNode
         button.selectedHandler = {
             let skView = self.view as SKView!
             let scene = GameScene(fileNamed:"GameScene") as GameScene!

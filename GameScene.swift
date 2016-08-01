@@ -19,8 +19,8 @@ class GameScene: SKScene {
     var offsetX = 0
     var offsetY = 0
     var initialTouchLocation = CGPoint(x: 0, y: 0)
-    var switchLeft: MSButtonNode!
-    var switchRight: MSButtonNode!
+    var switchLeft: MSButtonNode2!
+    var switchRight: MSButtonNode2!
     var restart: MSButtonNode!
     var back: MSButtonNode!
     var levelNode: SKNode!
@@ -38,7 +38,6 @@ class GameScene: SKScene {
     var playerUp = 0
     var mapSize = 4
     var blockSize: Int!
-    var numDeaths = 0
     
     
     var mixpanel: Mixpanel!
@@ -57,13 +56,15 @@ class GameScene: SKScene {
         
         levelLabel = childNodeWithName("level") as! SKLabelNode
         restart = childNodeWithName("restart") as! MSButtonNode
-        switchLeft = childNodeWithName("left") as! MSButtonNode
-        switchRight = childNodeWithName("right") as! MSButtonNode
+        switchLeft = childNodeWithName("left") as! MSButtonNode2
+        switchRight = childNodeWithName("right") as! MSButtonNode2
         levelNode = childNodeWithName("levelNode")!
         bLeft = childNodeWithName("bLeft") as! SKSpriteNode
         bRight = childNodeWithName("bRight") as! SKSpriteNode
         backdrop = childNodeWithName("//backdrop") as! SKSpriteNode
         back = childNodeWithName("back") as! MSButtonNode
+        switchLeft.link = bLeft
+        switchRight.link = bRight
         if gameManager.level >= 35 || random {
             mapSize = 5
         }
@@ -303,10 +304,10 @@ class GameScene: SKScene {
                        [Block(id: 1), Block(id: 0), Block(id: 3), Block(id: 1)]]
         
      let level40 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 1)],
-                    [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0), Block(id: 1)],
-                    [Block(id: 4), Block(id: 1), Block(id: 1), Block(id: 0), Block(id: 4)],
-                    [Block(id: 0), Block(id: 4), Block(id: 4), Block(id: 0), Block(id: 0)],
-                    [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 2), Block(id: 0)]]
+                    [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)],
+                    [Block(id: 4), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 4)],
+                    [Block(id: 0), Block(id: 4), Block(id: 4), Block(id: 1 ), Block(id: 0)],
+                    [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 2), Block(id: 1)]]
         
         let level41 = [[Block(id: 4), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 3)],
                        [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 4)],
@@ -316,22 +317,58 @@ class GameScene: SKScene {
         
         let level42 = [[Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4)],
                        [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-                       [Block(id: 0), Block(id: 1), Block(id: 4), Block(id: 1), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
                        [Block(id: 3), Block(id: 1), Block(id: 0), Block(id: 1), Block(id: 3)],
                        [Block(id: 4), Block(id: 1), Block(id: 0), Block(id: 1), Block(id: 4)]]
         
-        let level43 = [[Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 4), Block(id: 4)],
-                       [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 4), Block(id: 3)],
+        let level43 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 4)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 3)],
                        [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 1), Block(id: 0)],
                        [Block(id: 3), Block(id: 4), Block(id: 0), Block(id: 1), Block(id: 0)],
-                       [Block(id: 4), Block(id: 4), Block(id: 2), Block(id: 1), Block(id: 0)]]
+                       [Block(id: 4), Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0)]]
         
         let level44 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                        [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
                        [Block(id: 1), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
                        [Block(id: 4), Block(id: 0), Block(id: 1), Block(id: 3), Block(id: 1)],
                        [Block(id: 3), Block(id: 0), Block(id: 1), Block(id: 4), Block(id: 1)]]
+ 
+        let level45 = [[Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 4), Block(id: 0)],
+                       [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 4), Block(id: 1)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 1)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 2)]]
         
+        let level46 = [[Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 4), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 0)],
+                       [Block(id: 0), Block(id: 1), Block(id: 3), Block(id: 1), Block(id: 1)]]
+
+        let level47 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
+                       [Block(id: 1), Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 0)],
+                       [Block(id: 3), Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 0)]]
+    
+        let level48 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)]]
+
+        let level49 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 2)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 4)],
+                       [Block(id: 1), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 4)],
+                       [Block(id: 1), Block(id: 1), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 0), Block(id: 0)]]
+
+        let level50 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)]]
+
         
         levels.append(level0)
         levels.append(level1)
@@ -373,7 +410,12 @@ class GameScene: SKScene {
         levels.append(level42)
         levels.append(level43)
         levels.append(level44)
-        
+        levels.append(level45)
+        levels.append(level46)
+        levels.append(level47)
+        //levels.append(level48)
+        levels.append(level49)
+        levels.append(level50)
         
     }
     
@@ -527,9 +569,9 @@ class GameScene: SKScene {
             playerY -= 1
             direction = -1
             player.xScale = 0.22*CGFloat(direction) - CGFloat(Double(direction)*0.03*Double(Int(mapSize/5)))
-
+            self.mixpanel.track("Died", properties: ["level": self.gameManager.level])
         }
-
+        
         
         if touch.locationInNode(self).x > initialTouchLocation.x + 40 && playerX < mapSize - 1 {
             //print(levels[gameManager.level][playerY][playerX+1].id)
@@ -765,7 +807,6 @@ class GameScene: SKScene {
                 let skView = self.view as SKView!
                 self.mixpanel.track("Died", properties: ["level": self.gameManager.level])
                 let scene = GameScene(fileNamed:"GameScene")!
-                scene.numDeaths = self.numDeaths + 1
                 scene.scaleMode = .AspectFill
                 scene.gameManager.level = self.gameManager.level
                 skView.presentScene(scene, transition:SKTransition.crossFadeWithDuration(1))
@@ -872,9 +913,6 @@ class GameScene: SKScene {
             print(ln)
         }
         print("----")
-        //        print("PlAYER POSITION: \(player.x) \(player.y)")
-        //        print("----")
-        
         print()
     }
     

@@ -15,7 +15,7 @@ class LevelSelect: SKScene {
     
     var levels: [MSButtonNode]!
     
-    var numLevels = 38
+    var numLevels = 44
     var l = 0
     var initialTouchLocation = CGPoint()
     var touching = false

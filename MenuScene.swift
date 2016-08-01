@@ -10,12 +10,13 @@ import SpriteKit
 
 class MenuScene: SKScene {
     
-    var playButton: MSButtonNode!
-    var levelSelect: MSButtonNode!
+    var playButton: MSButtonNode2!
+    var levelSelect: MSButtonNode2!
     
     override func didMoveToView(view: SKView) {
         
-        playButton = childNodeWithName("playButton") as! MSButtonNode
+        playButton = childNodeWithName("playButton") as! MSButtonNode2
+        playButton.link = childNodeWithName("foo") as! SKSpriteNode
         playButton.selectedHandler = {
             /* Grab reference to our SpriteKit view */
             let skView = self.view as SKView!
@@ -32,7 +33,8 @@ class MenuScene: SKScene {
         }
 
         
-        levelSelect = childNodeWithName("levelSelect") as! MSButtonNode
+        levelSelect = childNodeWithName("levelSelect") as! MSButtonNode2
+        levelSelect.link = childNodeWithName("bar") as! SKSpriteNode
         
         levelSelect.selectedHandler = {
             /* Grab reference to our SpriteKit view */
