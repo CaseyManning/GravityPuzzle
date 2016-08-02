@@ -39,6 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         mixpanel.track("App closed", properties: ["level": GameManager.sharedInstance.level])
 
          GameManager.sharedInstance.saveData()
+        print("Saving data with level = \(GameManager.sharedInstance.level)")
         
     }
 

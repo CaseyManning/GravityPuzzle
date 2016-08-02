@@ -38,6 +38,8 @@ class GameScene: SKScene {
     var playerUp = 0
     var mapSize = 4
     var blockSize: Int!
+    var highlight: SKSpriteNode!
+    var a_bajillion: CGFloat = 5000000
     
     
     var mixpanel: Mixpanel!
@@ -48,7 +50,7 @@ class GameScene: SKScene {
         
         Mixpanel.sharedInstanceWithToken("3ac4eaa0e0773d7222617ce141f6f607")
         mixpanel = Mixpanel.sharedInstance()
-        
+        highlight = childNodeWithName("highlight") as! SKSpriteNode
         displayHint()
         player.xScale = 0.22*CGFloat(direction) - CGFloat(Double(direction)*0.03*Double(Int(mapSize/5)))
         player.yScale = 0.22 - CGFloat(Double(direction)*0.04*Double(Int(mapSize/5)))
@@ -63,6 +65,7 @@ class GameScene: SKScene {
         bRight = childNodeWithName("bRight") as! SKSpriteNode
         backdrop = childNodeWithName("//backdrop") as! SKSpriteNode
         back = childNodeWithName("back") as! MSButtonNode
+        
         switchLeft.link = bLeft
         switchRight.link = bRight
         if gameManager.level >= 35 || random {
@@ -462,7 +465,15 @@ class GameScene: SKScene {
             })])
             runAction(sequence)
             }
-    
+        
+        if dead && playerY < 3 {
+            //drawPlayer()
+            print("I think I might be moving downwards")
+            playerY += 1
+            print("My Y value happens to be \(playerY) at the present time")
+            //player.runAction(SKAction.moveTo(CGPoint(x: player.position.x, y: player.position.y - CGFloat(blockSize)), duration: 0.3))
+            player.runAction(SKAction.moveBy(CGVector(dx: 0, dy: -blockSize), duration: 0.3))
+        }
     }
     
     func gravity() -> Bool {
@@ -473,8 +484,6 @@ class GameScene: SKScene {
             for(j, block) in list.enumerate() {
                 if levels[gameManager.level][i+1][j].id == 0 && block.affectedByGravity == true && block.id != 0 && block.id != 5 {
                     
-                    //block.sprite.position.y -= CGFloat(blockSize)
-                    //block.sprite.runAction(SKAction(named: "moveDown")
                     block.sprite.runAction(SKAction.moveBy(CGVector(dx: 0, dy: -blockSize), duration: 0.30))
                     levels[gameManager.level][i+1][j].sprite.position.y += CGFloat(blockSize)
                     levels[gameManager.level][i][j] = levels[gameManager.level][i+1][j]
@@ -483,59 +492,11 @@ class GameScene: SKScene {
                 }
             }
         }
-        for(i, list) in levels[gameManager.level].enumerate() {
-            for(j, block) in list.enumerate() {
-                if block.id == 5 && i > 0 && levels[gameManager.level][i-1][j].id == 0 {
-                    print("Gravitying shtuff")
-                    //block.sprite.position.y -= CGFloat(blockSize)
-                    //block.sprite.runAction(SKAction(named: "moveDown")
-                    block.sprite.runAction(SKAction.moveBy(CGVector(dx: 0, dy: blockSize), duration: 0.50))
-                    if playerX == j && playerY == i-1 && playerY > 0 {
-                        print("Moving player up")
-                        print("Playerx is \(playerX), and playerY is \(playerY)")
-                        if playerUp == 0 {
-                            playerY -= 1
-                            playerUp += 1
-                            
-                            let sequence = SKAction.sequence([SKAction.moveBy(CGVector(dx: 0, dy: blockSize), duration: 0.50), SKAction.runBlock({ () -> Void in
-                                
-                                self.playerUp -= 1
-                            })])
-                            player.runAction(sequence)
-                        } else if playerUp == 1 {
-                            playerY -= 1
-                            playerUp += 1
-                            player.removeAllActions()
-                            let sequence = SKAction.sequence([SKAction.moveBy(CGVector(dx: 0, dy: blockSize*2), duration: 1), SKAction.runBlock({ () -> Void in
-                                
-                                self.playerUp -= 1
-                            })])
-                            player.runAction(sequence)
-                        } else if playerUp == 2 {
-                            playerY -= 1
-                            playerUp += 1
-                            player.removeAllActions()
-                            let sequence = SKAction.sequence([SKAction.moveBy(CGVector(dx: 0, dy: blockSize*3), duration: 1.5), SKAction.runBlock({ () -> Void in
-                                
-                                self.playerUp -= 1
-                            })])
-                            player.runAction(sequence)
-                        }
-                    }
-                    
-                    levels[gameManager.level][i-1][j].sprite.position.y -= CGFloat(blockSize)
-                    levels[gameManager.level][i][j] = levels[gameManager.level][i-1][j]
-                    levels[gameManager.level][i-1][j] = block
-                    f = true
-                    playerDead()
-                }
-            }
-        }
-        
+
         if playerY < mapSize - 1 {
             if levels[gameManager.level][playerY + 1][playerX].id == 0 && levels[gameManager.level][playerY][playerX].id == 0 {
-                print("DOWN DOWN DOWN Block id is \(levels[gameManager.level][playerY + 1][playerX].id)")
-                printOutPlayerMap(levels[gameManager.level], player: CGPoint(x: playerX,y: playerY))
+                //print("DOWN DOWN DOWN Block id is \(levels[gameManager.level][playerY + 1][playerX].id)")
+                //printOutPlayerMap(levels[gameManager.level], player: CGPoint(x: playerX,y: playerY))
                 player.runAction(SKAction.moveBy(CGVector(dx: 0, dy: -blockSize), duration: 0.30))
                 playerY += 1
             }
@@ -563,7 +524,7 @@ class GameScene: SKScene {
     
     func movePlayer(touch: UITouch) {
         print(CGFloat(Double(direction)*0.04*Double(Int(mapSize/5))))
-        if turning { return }
+        if turning || winned { return }
         if touch.locationInNode(self).y > initialTouchLocation.y + 50 && playerY > 0 && levels[gameManager.level][playerY-1][playerX].id == 0 {
             player.runAction(SKAction.moveBy(CGVector(dx: 0, dy: blockSize), duration: 0.15))
             playerY -= 1
@@ -802,6 +763,16 @@ class GameScene: SKScene {
             if levels[gameManager.level][playerY][playerX].id != 0 {
             dead = true
             print("The player may have died")
+                let particles = SKEmitterNode(fileNamed: "DeathParticle2")!
+                
+                //Convert node location (currently inside Level 1, to scene space)
+                particles.position = player.position
+                particles.zPosition = a_bajillion
+                //Restrict total particles to reduce runtime of particle
+                particles.numParticlesToEmit = 25
+                //Add particles to scene
+                addChild(particles)
+                
             let sequence = SKAction.sequence([SKAction.waitForDuration(0.6), SKAction.runBlock({ () -> Void in
                 print("You Lose")
                 let skView = self.view as SKView!
@@ -886,14 +857,20 @@ class GameScene: SKScene {
         if gameManager.level == 4 {
             
             let hint = SKSpriteNode(imageNamed: "arrow-left.png")
+            hint.zRotation = 11
             hint.xScale = -0.6
             hint.yScale = 0.6
-            hint.position = CGPoint(x: 415, y: 175)
+            hint.position = CGPoint(x: 485, y: 170)
             hint.zPosition = 20
             hint.alpha = 0
             addChild(hint)
             hint.runAction(SKAction(named: "Fade")!)
-            hint.runAction(SKAction(named: "BackForth")!)
+            hint.runAction(SKAction(named: "UpDown")!)
+            
+            let f = SKAction.fadeInWithDuration(1)
+            
+            let sequence = SKAction.sequence([SKAction.waitForDuration(8), f])
+            highlight.runAction(sequence)
         }
         
     }
@@ -917,5 +894,3 @@ class GameScene: SKScene {
     }
     
 }
-
-
