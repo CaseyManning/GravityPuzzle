@@ -18,7 +18,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="background2 copy 2.png" translatesAutoresizingMaskIntoConstraints="NO" id="eDm-Wg-Qbb">
-                                <rect key="frame" x="-97" y="-81" width="788" height="785"/>
+                                <rect key="frame" x="-86" y="-82" width="779" height="785"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
@@ -26,7 +26,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="23" y="285"/>
+            <point key="canvasLocation" x="69" y="437"/>
         </scene>
     </scenes>
     <resources>

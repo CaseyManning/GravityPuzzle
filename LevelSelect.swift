@@ -15,7 +15,7 @@ class LevelSelect: SKScene {
     
     var levels: [MSButtonNode]!
     
-    var numLevels = 34
+    var numLevels = 44
     var l = 0
     var initialTouchLocation = CGPoint()
     var touching = false
@@ -49,13 +49,20 @@ class LevelSelect: SKScene {
             initialTouchLocation = touch.locationInNode(self)
         }
         touching = true
+        
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        print("TOUCHESMOVED")
         for touch in touches {
         let loc = touch.locationInNode(self)
-        camera?.physicsBody?.velocity.dx = (initialTouchLocation.x - loc.x)*3
+        //touch.location
+        //let loc = touch.locationInView(view)
+        print("InitialTouchLocation: \(initialTouchLocation)")
+        print("CurrentTouchLocation: \(loc)")
+        //camera?.physicsBody?.velocity.dx = (initialTouchLocation.x - loc.x)*3
         camera?.physicsBody?.velocity.dy = (initialTouchLocation.y - loc.y)*3
+        print(camera?.physicsBody?.velocity.dy)
         }
     }
     
@@ -65,6 +72,17 @@ class LevelSelect: SKScene {
     }
     
     override func update(currentTime: NSTimeInterval) {
+        
+        if camera?.position.y > 250 {
+            camera?.physicsBody?.velocity.dy = 0
+            camera?.position.y -= 1
+        }
+        
+        if camera?.position.y < -300 {
+            camera?.physicsBody?.velocity.dy = 0
+            camera?.position.y += 1
+        }
+        
         for _ in 1...5 {
         if camera?.physicsBody?.velocity.dy > 0 {
             camera?.physicsBody?.velocity.dy -= 1

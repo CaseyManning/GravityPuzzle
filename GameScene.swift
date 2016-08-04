@@ -306,73 +306,80 @@ class GameScene: SKScene {
                        [Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 1)],
                        [Block(id: 1), Block(id: 0), Block(id: 3), Block(id: 1)]]
         
-//     let level40 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 1)],
-//                    [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)],
-//                    [Block(id: 4), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 4)],
-//                    [Block(id: 0), Block(id: 4), Block(id: 4), Block(id: 1 ), Block(id: 0)],
-//                    [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 2), Block(id: 1)]]
-//        
-//        let level41 = [[Block(id: 4), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 3)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 4)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 4), Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 3), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 4)]]
-//        
-//        let level42 = [[Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 3), Block(id: 1), Block(id: 0), Block(id: 1), Block(id: 3)],
-//                       [Block(id: 4), Block(id: 1), Block(id: 0), Block(id: 1), Block(id: 4)]]
-//        
-//        let level43 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 4)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 3)],
-//                       [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 1), Block(id: 0)],
-//                       [Block(id: 3), Block(id: 4), Block(id: 0), Block(id: 1), Block(id: 0)],
-//                       [Block(id: 4), Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0)]]
-//        
-//        let level44 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 1), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
-//                       [Block(id: 4), Block(id: 0), Block(id: 1), Block(id: 3), Block(id: 1)],
-//                       [Block(id: 3), Block(id: 0), Block(id: 1), Block(id: 4), Block(id: 1)]]
-// 
-//        let level45 = [[Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 4), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 4), Block(id: 1)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 1)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 2)]]
-//        
-//        let level46 = [[Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 4), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 1), Block(id: 3), Block(id: 1), Block(id: 1)]]
-//
-//        let level47 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
-//                       [Block(id: 1), Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 0)],
-//                       [Block(id: 3), Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 0)]]
-//    
-//        let level48 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)]]
-//
-//        let level49 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 2)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 4)],
-//                       [Block(id: 1), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 4)],
-//                       [Block(id: 1), Block(id: 1), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 0), Block(id: 0)]]
-//
-//        let level50 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-//                       [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)]]
-//
-//        
+     let level40 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 1)],
+                    [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1)],
+                    [Block(id: 4), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 4)],
+                    [Block(id: 0), Block(id: 4), Block(id: 4), Block(id: 1 ), Block(id: 0)],
+                    [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 2), Block(id: 1)]]
+        
+        let level41 = [[Block(id: 4), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 3)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 4)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 4), Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 3), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 4)]]
+        
+        let level42 = [[Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
+                       [Block(id: 3), Block(id: 1), Block(id: 0), Block(id: 1), Block(id: 3)],
+                       [Block(id: 4), Block(id: 1), Block(id: 0), Block(id: 1), Block(id: 4)]]
+        
+        let level43 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 4)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 3)],
+                       [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 1), Block(id: 0)],
+                       [Block(id: 3), Block(id: 4), Block(id: 0), Block(id: 1), Block(id: 0)],
+                       [Block(id: 4), Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0)]]
+        
+        let level44 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
+                       [Block(id: 1), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
+                       [Block(id: 4), Block(id: 0), Block(id: 1), Block(id: 3), Block(id: 1)],
+                       [Block(id: 3), Block(id: 0), Block(id: 1), Block(id: 4), Block(id: 1)]]
+ 
+        let level45 = [[Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 4), Block(id: 0)],
+                       [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 4), Block(id: 1)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 1)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 2)]]
+        
+        let level46 = [[Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 4), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 0)],
+                       [Block(id: 0), Block(id: 1), Block(id: 3), Block(id: 1), Block(id: 1)]]
+
+      /* a shmittle to easy*/  let level47 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
+                       [Block(id: 1), Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 0)],
+                       [Block(id: 3), Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 0)]]
+    
+        let level48 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 3)],
+                       [Block(id: 0), Block(id: 1), Block(id: 4), Block(id: 4), Block(id: 4)],
+                       [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 3)],
+                       [Block(id: 1), Block(id: 1), Block(id: 0), Block(id: 0), Block(id: 1)]]
+
+        let level49 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 2)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 4)],
+                       [Block(id: 1), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 4)],
+                       [Block(id: 1), Block(id: 1), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 0), Block(id: 0)]]
+
+        let level50 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
+                       [Block(id: 3), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 3)],
+                       [Block(id: 1), Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 0)]]
+        
+        let level51 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 4), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 4)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)]]
+
+
+        
         levels.append(level0)
         levels.append(level1)
         levels.append(level2)
@@ -408,17 +415,17 @@ class GameScene: SKScene {
         levels.append(level17)
         levels.append(level28)
         levels.append(level39)
-//        levels.append(level40)
-//        levels.append(level41)
-//        levels.append(level42)
-//        levels.append(level43)
-//        levels.append(level44)
-//        levels.append(level45)
-//        levels.append(level46)
-//        levels.append(level47)
-//        levels.append(level48)
-//        levels.append(level49)
-//        levels.append(level50)
+        levels.append(level40)
+        levels.append(level41)
+        levels.append(level42)
+        levels.append(level43)
+        levels.append(level44)
+        levels.append(level45)
+        levels.append(level46)
+        levels.append(level47)
+        levels.append(level48)
+        levels.append(level49)
+        levels.append(level50)
         
     }
     
@@ -466,12 +473,11 @@ class GameScene: SKScene {
             runAction(sequence)
             }
         
-        if dead && playerY < 3 {
+        if dead && playerY < mapSize - 1 {
             //drawPlayer()
             print("moving downwards")
             playerY += 1
             print("My Y value is \(playerY)")
-            //player.runAction(SKAction.moveTo(CGPoint(x: player.position.x, y: player.position.y - CGFloat(blockSize)), duration: 0.3))
             player.runAction(SKAction.moveBy(CGVector(dx: 0, dy: -blockSize), duration: 0.3))
         }
     }
@@ -774,7 +780,7 @@ class GameScene: SKScene {
                 //Restrict total particles to reduce runtime of particle
                 particles.numParticlesToEmit = 25
                 //Add particles to scene
-                addChild(particles)
+                //addChild(particles)
                 
             let sequence = SKAction.sequence([SKAction.waitForDuration(0.6), SKAction.runBlock({ () -> Void in
                 print("You Lose")
