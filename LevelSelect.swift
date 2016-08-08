@@ -46,6 +46,7 @@ class LevelSelect: SKScene {
         
         for (i,level) in levels.enumerate() {
             
+            level.camera = camera
             level.selectedHandler = {
                 let flapSFX = SKAction.playSoundFileNamed("button", waitForCompletion: false)
                 self.runAction(flapSFX)

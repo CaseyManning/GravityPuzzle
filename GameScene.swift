@@ -896,7 +896,7 @@ class GameScene: SKScene {
         }
         
     }
-    
+
     func printOutPlayerMap(map: [[Block]], player: CGPoint) {
         print()
         print("----")
@@ -914,5 +914,5 @@ class GameScene: SKScene {
         print("----")
         print()
     }
-    
+
 }
