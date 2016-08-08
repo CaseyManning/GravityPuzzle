@@ -20,6 +20,7 @@ class GameManager {
     
     /* Properties */
     var level = 0
+    var levelsCompleted = 0
     
     init() {
         /* Load stored data by default */

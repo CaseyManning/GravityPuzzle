@@ -9,6 +9,7 @@
 import SpriteKit
 import Foundation
 import Mixpanel
+import AVFoundation
 
 class GameScene: SKScene {
     
@@ -40,7 +41,10 @@ class GameScene: SKScene {
     var blockSize: Int!
     var highlight: SKSpriteNode!
     var a_bajillion: CGFloat = 5000000
-    
+    var arrowLeft: SKSpriteNode!
+    var arrowRight: SKSpriteNode!
+    var gravitying = false
+    var backgroundMusicPlayer: AVAudioPlayer!
     
     var mixpanel: Mixpanel!
     
@@ -54,6 +58,7 @@ class GameScene: SKScene {
         displayHint()
         player.xScale = 0.22*CGFloat(direction) - CGFloat(Double(direction)*0.03*Double(Int(mapSize/5)))
         player.yScale = 0.22 - CGFloat(Double(direction)*0.04*Double(Int(mapSize/5)))
+
         player.runAction(SKAction(named: "Idle")!)
         
         levelLabel = childNodeWithName("level") as! SKLabelNode
@@ -65,6 +70,8 @@ class GameScene: SKScene {
         bRight = childNodeWithName("bRight") as! SKSpriteNode
         backdrop = childNodeWithName("//backdrop") as! SKSpriteNode
         back = childNodeWithName("back") as! MSButtonNode
+        arrowLeft = childNodeWithName("arrowLeft") as! SKSpriteNode
+        arrowRight = childNodeWithName("arrowRight") as! SKSpriteNode
         
         switchLeft.link = bLeft
         switchRight.link = bRight
@@ -75,6 +82,14 @@ class GameScene: SKScene {
         offsetX = -blockSize*2 + 36
         offsetY = -blockSize*2 + 36
         loadlevels()
+        if levels[gameManager.level][playerY + 1][playerX].id == 0 {
+            playerY += 1
+            //player.position.y -= CGFloat(blockSize)
+        }
+        if levels[gameManager.level][playerY + 1][playerX].id == 0 {
+            playerY += 1
+            //player.position.y -= CGFloat(blockSize)
+        }
         for _ in -1...gameManager.level {
             levels.append([])
         }
@@ -87,6 +102,9 @@ class GameScene: SKScene {
         levelLabel.text = String(gameManager.level + 1)
         
         restart.selectedHandler = {
+            let flapSFX = SKAction.playSoundFileNamed("button", waitForCompletion: false)
+            self.runAction(flapSFX)
+
             let skView = self.view as SKView!
             let scene = GameScene(fileNamed:"GameScene")!
             self.mixpanel.track("Died", properties: ["level": self.gameManager.level])
@@ -97,6 +115,9 @@ class GameScene: SKScene {
         }
         
         back.selectedHandler = {
+            let flapSFX = SKAction.playSoundFileNamed("button", waitForCompletion: false)
+            self.runAction(flapSFX)
+
             let skView = self.view as SKView!
             let scene = MenuScene(fileNamed:"MenuScene")!
             scene.scaleMode = .AspectFill
@@ -104,9 +125,6 @@ class GameScene: SKScene {
             skView.presentScene(scene, transition: SKTransition.crossFadeWithDuration(1))
             
         }
-        
-        
-        
         
         
         levelNode.addChild(player)
@@ -117,11 +135,13 @@ class GameScene: SKScene {
         if !random {
             if gameManager.level < 4 {
                 switchRight.state = .Hidden
+                arrowRight.alpha = 0
                 bRight.alpha = 0
             }
             
             if gameManager.level < 5 {
                 switchLeft.state = .Hidden
+                arrowLeft.alpha = 0
                 bLeft.alpha = 0
             }
         }
@@ -348,38 +368,18 @@ class GameScene: SKScene {
                        [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 0)],
                        [Block(id: 0), Block(id: 1), Block(id: 3), Block(id: 1), Block(id: 1)]]
 
-      /* a shmittle to easy*/  let level47 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
+        let level47 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
                        [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
                        [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 0)],
                        [Block(id: 1), Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 0)],
                        [Block(id: 3), Block(id: 0), Block(id: 4), Block(id: 3), Block(id: 0)]]
     
-        let level48 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-                       [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 3)],
-                       [Block(id: 0), Block(id: 1), Block(id: 4), Block(id: 4), Block(id: 4)],
-                       [Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 3)],
-                       [Block(id: 1), Block(id: 1), Block(id: 0), Block(id: 0), Block(id: 1)]]
-
-        let level49 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 2)],
-                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 1), Block(id: 4)],
-                       [Block(id: 1), Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 4)],
-                       [Block(id: 1), Block(id: 1), Block(id: 0), Block(id: 0), Block(id: 0)],
-                       [Block(id: 1), Block(id: 1), Block(id: 1), Block(id: 0), Block(id: 0)]]
-
         let level50 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
-                       [Block(id: 3), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
+                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 3)],
                        [Block(id: 4), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 4)],
                        [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 3)],
                        [Block(id: 1), Block(id: 0), Block(id: 4), Block(id: 1), Block(id: 0)]]
-        
-        let level51 = [[Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)],
-                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-                       [Block(id: 4), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 4)],
-                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
-                       [Block(id: 0), Block(id: 0), Block(id: 4), Block(id: 0), Block(id: 0)]]
 
-
-        
         levels.append(level0)
         levels.append(level1)
         levels.append(level2)
@@ -388,12 +388,12 @@ class GameScene: SKScene {
         levels.append(level5)
         levels.append(level6)
         levels.append(level22)
-        levels.append(level8)
+        levels.append(level23)
         levels.append(level9)
         levels.append(level10)
         levels.append(level7)
         levels.append(level26)
-        levels.append(level23)
+        levels.append(level8)
         levels.append(level12)
         levels.append(level13)
         levels.append(level14)
@@ -423,8 +423,6 @@ class GameScene: SKScene {
         levels.append(level45)
         levels.append(level46)
         levels.append(level47)
-        levels.append(level48)
-        levels.append(level49)
         levels.append(level50)
         
     }
@@ -461,9 +459,12 @@ class GameScene: SKScene {
         
         if won(levels[gameManager.level], x: playerX, y: playerY) && winned == false{
             winned = true
+            let flapSFX = SKAction.playSoundFileNamed("success", waitForCompletion: false)
+            self.runAction(flapSFX)
             let sequence = SKAction.sequence([SKAction.waitForDuration(1), SKAction.runBlock({ () -> Void in
             print("You Win level \(self.gameManager.level)")
-            
+                
+
             self.mixpanel.track("Level Completed", properties: ["level": self.gameManager.level])
             let skView = self.view as SKView!
             let scene = BetweenScene(fileNamed:"BetweenScene")!
@@ -489,8 +490,11 @@ class GameScene: SKScene {
         for(i, list) in levels[gameManager.level].dropLast().enumerate() {
             for(j, block) in list.enumerate() {
                 if levels[gameManager.level][i+1][j].id == 0 && block.affectedByGravity == true && block.id != 0 && block.id != 5 {
-                    
-                    block.sprite.runAction(SKAction.moveBy(CGVector(dx: 0, dy: -blockSize), duration: 0.30))
+                    gravitying = true
+                    let sequence = SKAction.sequence([SKAction.moveBy(CGVector(dx: 0, dy: -blockSize), duration: 0.30), SKAction.runBlock({ () -> Void in
+                        self.gravitying = false
+                        })])
+                    block.sprite.runAction(sequence)
                     levels[gameManager.level][i+1][j].sprite.position.y += CGFloat(blockSize)
                     levels[gameManager.level][i][j] = levels[gameManager.level][i+1][j]
                     levels[gameManager.level][i+1][j] = block
@@ -530,7 +534,7 @@ class GameScene: SKScene {
     
     func movePlayer(touch: UITouch) {
         print(CGFloat(Double(direction)*0.04*Double(Int(mapSize/5))))
-        if turning || winned { return }
+        if turning || winned || gravitying { return }
         if touch.locationInNode(self).y > initialTouchLocation.y + 50 && playerY > 0 && levels[gameManager.level][playerY-1][playerX].id == 0 {
             player.runAction(SKAction.moveBy(CGVector(dx: 0, dy: blockSize), duration: 0.15))
             playerY -= 1
@@ -666,6 +670,13 @@ class GameScene: SKScene {
     func switchGravity(left: Bool) {
         print("Happy Time X is \(playerX), Y is \(playerY)")
         if turning { return }
+        /* Play the swooshy sound!*/
+        
+        
+        
+        /* More swooshes!*/
+        let flapSFX2 = SKAction.playSoundFileNamed("swooosh", waitForCompletion: false)
+        self.runAction(flapSFX2)
         turning = true
          if left {
             let action = SKAction.rotateByAngle(CGFloat(π/2), duration: 0.6)
@@ -873,12 +884,14 @@ class GameScene: SKScene {
             hint.zPosition = 20
             hint.alpha = 0
             addChild(hint)
-            hint.runAction(SKAction(named: "Fade")!)
+            hint.runAction(SKAction.fadeInWithDuration(4))
             hint.runAction(SKAction(named: "UpDown")!)
             
             let f = SKAction.fadeInWithDuration(1)
             
-            let sequence = SKAction.sequence([SKAction.waitForDuration(8), f])
+            let sequence = SKAction.sequence([SKAction.waitForDuration(1), f])
+            //highlight.zPosition = 200
+            //highlight.alpha = 100
             highlight.runAction(sequence)
         }
         

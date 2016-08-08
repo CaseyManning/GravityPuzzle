@@ -8,10 +8,11 @@
 
 import Foundation
 import SpriteKit
+import AVFoundation
 
 class LevelSelect: SKScene {
     
-    
+    var backgroundMusicPlayer: AVAudioPlayer!
     
     var levels: [MSButtonNode]!
     
@@ -19,11 +20,22 @@ class LevelSelect: SKScene {
     var l = 0
     var initialTouchLocation = CGPoint()
     var touching = false
+    var exit: MSButtonNode!
     
     override func didMoveToView(view: SKView) {
         let f: MSButtonNode = childNodeWithName("level1") as! MSButtonNode
         levels = [MSButtonNode](count: numLevels, repeatedValue: f)
         loadLevels()
+        exit = childNodeWithName("exit") as! MSButtonNode
+        exit.selectedHandler = {
+            let flapSFX = SKAction.playSoundFileNamed("button", waitForCompletion: false)
+            self.runAction(flapSFX)
+            let skView = self.view as SKView!
+            let scene = MenuScene(fileNamed:"MenuScene")!
+            scene.scaleMode = .AspectFill
+            skView.presentScene(scene, transition: SKTransition.crossFadeWithDuration(1))
+            
+        }
     }
     
     func loadLevels() {
@@ -35,6 +47,8 @@ class LevelSelect: SKScene {
         for (i,level) in levels.enumerate() {
             
             level.selectedHandler = {
+                let flapSFX = SKAction.playSoundFileNamed("button", waitForCompletion: false)
+                self.runAction(flapSFX)
                 let skView = self.view as SKView!
                 let scene = GameScene(fileNamed:"GameScene")!
                 scene.gameManager.level = i
@@ -62,7 +76,6 @@ class LevelSelect: SKScene {
         print("CurrentTouchLocation: \(loc)")
         //camera?.physicsBody?.velocity.dx = (initialTouchLocation.x - loc.x)*3
         camera?.physicsBody?.velocity.dy = (initialTouchLocation.y - loc.y)*3
-        print(camera?.physicsBody?.velocity.dy)
         }
     }
     
@@ -78,7 +91,7 @@ class LevelSelect: SKScene {
             camera?.position.y -= 1
         }
         
-        if camera?.position.y < -300 {
+        if camera?.position.y < -380 {
             camera?.physicsBody?.velocity.dy = 0
             camera?.position.y += 1
         }
@@ -90,12 +103,12 @@ class LevelSelect: SKScene {
         if camera?.physicsBody?.velocity.dy < 0 {
             camera?.physicsBody?.velocity.dy += 1
         }
-            if camera?.physicsBody?.velocity.dx > 0 {
-                camera?.physicsBody?.velocity.dx -= 1
-            }
-            if camera?.physicsBody?.velocity.dx < 0 {
-                camera?.physicsBody?.velocity.dx += 1
-            }
+        if camera?.physicsBody?.velocity.dx > 0 {
+            camera?.physicsBody?.velocity.dx -= 1
+        }
+        if camera?.physicsBody?.velocity.dx < 0 {
+            camera?.physicsBody?.velocity.dx += 1
+        }
         }
     }
 }

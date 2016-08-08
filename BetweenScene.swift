@@ -21,6 +21,7 @@ class BetweenScene: SKScene{
             let skView = self.view
             let scene = Credits(fileNamed:"Credits")!
             scene.scaleMode = .AspectFill
+            self.gameManager.levelsCompleted += 1
             skView!.presentScene(scene, transition: SKTransition.crossFadeWithDuration(5))
             })
             runAction(action)
@@ -30,6 +31,8 @@ class BetweenScene: SKScene{
         button = childNodeWithName("nextLevel") as! MSButtonNode2
         button.link = childNodeWithName("foo") as! SKSpriteNode
         button.selectedHandler = {
+            let flapSFX = SKAction.playSoundFileNamed("button", waitForCompletion: false)
+            self.runAction(flapSFX)
             let skView = self.view as SKView!
             let scene = GameScene(fileNamed:"GameScene") as GameScene!
             scene.scaleMode = .AspectFill

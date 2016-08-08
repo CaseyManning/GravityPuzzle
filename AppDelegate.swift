@@ -37,8 +37,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         Mixpanel.sharedInstanceWithToken("3ac4eaa0e0773d7222617ce141f6f607")
         let mixpanel: Mixpanel = Mixpanel.sharedInstance()
         mixpanel.track("App closed", properties: ["level": GameManager.sharedInstance.level])
-
-         GameManager.sharedInstance.saveData()
+        
+        GameManager.sharedInstance.saveData()
         print("Saving data with level = \(GameManager.sharedInstance.level)")
         
     }
