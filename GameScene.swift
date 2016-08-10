@@ -670,11 +670,8 @@ class GameScene: SKScene {
     func switchGravity(left: Bool) {
         print("Happy Time X is \(playerX), Y is \(playerY)")
         if turning { return }
-        /* Play the swooshy sound!*/
+
         
-        
-        
-        /* More swooshes!*/
         let flapSFX2 = SKAction.playSoundFileNamed("swooosh", waitForCompletion: false)
         self.runAction(flapSFX2)
         turning = true
