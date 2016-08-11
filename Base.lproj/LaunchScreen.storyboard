@@ -17,19 +17,25 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="background2 copy 2.png" translatesAutoresizingMaskIntoConstraints="NO" id="eDm-Wg-Qbb">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="bg.png" translatesAutoresizingMaskIntoConstraints="NO" id="eDm-Wg-Qbb">
                                 <rect key="frame" x="-86" y="-82" width="779" height="785"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="eDm-Wg-Qbb" secondAttribute="bottom" id="JM6-35-mt6"/>
+                            <constraint firstAttribute="trailing" secondItem="eDm-Wg-Qbb" secondAttribute="trailing" id="PD6-yT-Q3A"/>
+                            <constraint firstItem="eDm-Wg-Qbb" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="jm9-Tq-vja"/>
+                            <constraint firstItem="eDm-Wg-Qbb" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" id="yOK-WE-2kX"/>
+                        </constraints>
                     </view>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iYj-Kq-Ea1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="69" y="437"/>
+            <point key="canvasLocation" x="139" y="515"/>
         </scene>
     </scenes>
     <resources>
-        <image name="background2 copy 2.png" width="500" height="496"/>
+        <image name="bg.png" width="397" height="331"/>
     </resources>
 </document>

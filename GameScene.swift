@@ -115,14 +115,15 @@ class GameScene: SKScene {
         }
         
         back.selectedHandler = {
-            let flapSFX = SKAction.playSoundFileNamed("button", waitForCompletion: false)
-            self.runAction(flapSFX)
+
+           let flapSFX = SKAction.playSoundFileNamed("button", waitForCompletion: false)
+           self.runAction(flapSFX)
 
             let skView = self.view as SKView!
             let scene = MenuScene(fileNamed:"MenuScene")!
             scene.scaleMode = .AspectFill
             self.gameManager.saveData()
-            skView.presentScene(scene, transition: SKTransition.crossFadeWithDuration(1))
+            //skView.presentScene(scene, transition: SKTransition.crossFadeWithDuration(1))
             
         }
         
@@ -391,13 +392,13 @@ class GameScene: SKScene {
         levels.append(level23)
         levels.append(level9)
         levels.append(level10)
-        levels.append(level7)
+        levels.append(level19)
         levels.append(level26)
         levels.append(level8)
         levels.append(level12)
         levels.append(level13)
         levels.append(level14)
-        levels.append(level19)
+        levels.append(level7)
         levels.append(level20)
         levels.append(level27)
         levels.append(level37)
