@@ -40,7 +40,7 @@ class GameScene: SKScene {
     var mapSize = 4
     var blockSize: Int!
     var highlight: SKSpriteNode!
-    var a_bajillion: CGFloat = 5000000
+    var a_bajillion: CGFloat = 500000000
     var arrowLeft: SKSpriteNode!
     var arrowRight: SKSpriteNode!
     var gravitying = false
@@ -123,7 +123,7 @@ class GameScene: SKScene {
             let scene = MenuScene(fileNamed:"MenuScene")!
             scene.scaleMode = .AspectFill
             self.gameManager.saveData()
-            //skView.presentScene(scene, transition: SKTransition.crossFadeWithDuration(1))
+            skView.presentScene(scene, transition: SKTransition.crossFadeWithDuration(1))
             
         }
         
@@ -169,7 +169,6 @@ class GameScene: SKScene {
                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                       [Block(id: 0), Block(id: 1), Block(id: 0), Block(id: 0)],
                       [Block(id: 0), Block(id: 1), Block(id: 1), Block(id: 2)]]
-        
         
         let level4 = [[Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 0)],
                       [Block(id: 0), Block(id: 0), Block(id: 0), Block(id: 2)],

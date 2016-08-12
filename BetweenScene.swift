@@ -16,7 +16,7 @@ class BetweenScene: SKScene{
     
     override func didMoveToView(view: SKView) {
         print("Level is \(gameManager.level)")
-        if gameManager.level == LevelSelect().numLevels {
+        if gameManager.level+1 == LevelSelect().numLevels {
             let action = SKAction.runBlock({ () -> Void in
             let skView = self.view
             let scene = Credits(fileNamed:"Credits")!
